@@ -25,7 +25,7 @@ data-sidebar-position="fixed" data-header-position="fixed">
           <span class="hide-menu">Home</span>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" href="" aria-expanded="false">
+          <a class="sidebar-link" href="{{route('menukaryawan')}}" aria-expanded="false">
             <span>
               <i class="ti ti-layout-dashboard"></i>
             </span>
@@ -33,7 +33,7 @@ data-sidebar-position="fixed" data-header-position="fixed">
           </a>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" href="#" aria-expanded="false">
+          <a class="sidebar-link" href="{{route('menupelanggan')}}" aria-expanded="false">
             <span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
             </span>
@@ -189,15 +189,15 @@ data-sidebar-position="fixed" data-header-position="fixed">
                   <i class="ti ti-user fs-6"></i>
                   <p class="mb-0 fs-3">My Profile</p>
                 </a>
-                <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                {{-- <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                   <i class="ti ti-mail fs-6"></i>
                   <p class="mb-0 fs-3">My Account</p>
                 </a>
                 <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                   <i class="ti ti-list-check fs-6"></i>
                   <p class="mb-0 fs-3">My Task</p>
-                </a>
-                <a href="" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
+                </a> --}}
+                <a href="{{route('login')}}" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a>
               </div>
             </div>
           </li>

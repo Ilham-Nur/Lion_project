@@ -46,12 +46,9 @@ class LoginController extends Controller
 
 
 
-    // public function logout()
-    // {
-    //     if (session()->has('loggedInUser')) {
-    //         session()->pull('loggedInUser');
-    //         return redirect('/');
-    //     }
-    // }
+    public function logout()
+    {
+        return redirect('/');   
+    }
 
 }

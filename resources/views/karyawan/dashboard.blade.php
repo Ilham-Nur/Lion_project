@@ -5,31 +5,105 @@
 @section('main')
 
 <div class="container-fluid">
+
+<!-- Modal Tambah-->
+<div class="modal fade" id="modalTambahHarian" tabindex="-1" aria-labelledby="modalTambahHarianLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalTambahHarianLabel">Tambah Manual Data</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="mt-3">
+              <label for="namaPelanggan" class="form-label fw-bold">Tanggal</label>
+              <input type="text" class="form-control" id="tanggalData" value="">
+          </div>
+          <div class="mt-3">
+              <label class="form-label fw-bold">Jenis Transaksi</label><br>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="jenisTransaksi" id="pemasukan" value="pemasukan">
+                  <label class="form-check-label" for="pemasukan">Pemasukan</label>
+              </div>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="jenisTransaksi" id="pengeluaran" value="pengeluaran">
+                  <label class="form-check-label" for="pengeluaran">Pengeluaran</label>
+              </div>
+          </div>
+          <div class="mt-3">
+              <label for="pelanggan" class="form-label fw-bold">Pelanggan</label>
+              <select class="form-control" id="pelanggan">
+               <option value="">tes</option>
+              </select>
+          </div>
+          <div class="mt-3">
+              <label for="noResi" class="form-label fw-bold">Nomor Resi</label>
+              <input type="text" class="form-control" id="noResi" value="">
+          </div>
+
+          <div class="mt-3">
+              <label for="harga" class="form-label fw-bold">Nominal</label>
+              <input type="number" class="form-control" id="harga" value="">
+          </div>
+          <div class="mt-3">
+              <label for="harga" class="form-label fw-bold">Pajak</label>
+              <input type="number" class="form-control" id="harga" value="">
+          </div>
+          <div class="mt-3">
+              <label for="pembayaran" class="form-label fw-bold">Metode Pembayaran</label>
+              <select class="form-select" id="pembayaran">
+                  <option value="tunai">Tunai</option>
+                  <option value="transfer">Transfer</option>
+                  <option value="kartu_kredit">Kartu Kredit</option>
+              </select>
+          </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+        <button type="button" id="submitpelanggan" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--End Modal Tambah-->
+
+
+
+
   <div class="row">
     <div class="d-flex gap-3 justify-content-between">
       {{-- Search --}}
       <input id="txSearch" type="text" style="width: 250px; min-width: 250px;"class="form-control rounded-3" placeholder="Search">
       <div class="d-flex gap-3">
         <button type="button" id="" class="btn btn-primary">Import Data Harian</button>
-        <button type="button" id="" class="btn btn-primary">Tambah Data Harian</button>
+        <button type="button" id="btnTambahDatManual" class="btn btn-primary">Tambah Data Harian</button>
       </div>
   </div>
-  <div id="containerAttendanceOverbreak" class="col-sm-12 mt-3">
-    <table id="attendanceOverbreak" class="table table-responsive table-hover">
+  <div id="containerDataHarian" class="col-sm-12 mt-3">
+    {{-- <table id="tableDataHarian" class="table table-responsive table-hover">
         <thead>
             <tr class="table-primary" >
                 <th scope="col">Tanggal</th>
+                <th scope="col">Jenis Transaksi</th>
                 <th scope="col">Keterangan</th>
                 <th scope="col">No Resi</th>
-                <th scope="col">Ongkir</th>
+                <th scope="col">Nominal</th>
                 <th scope="col">Pajak</th>
                 <th scope="col">Pembayaran</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
         <tbody>
-            <tr class="align-middle">
+            <tr >
                 <td>12 April 2023</td>
+                <td>
+                  <div class="d-flex">
+                    <span><img src="{{ asset('icons/Down.svg') }}"></span>
+                    <p class="ps-1">Keluar</p>
+                  </div>
+                 
+                </td>
                 <td>Beli Lakban</td>
                 <td>-</td>
                 <td>-</td>
@@ -44,8 +118,14 @@
 
                 </td>
             </tr>
-            <tr class="align-middle">
+            <tr >
                 <td>12 April 2023</td>
+                <td>
+                  <div class="d-flex">
+                    <span><img src="{{ asset('icons/Up.svg') }}"></span>
+                    <p class="ps-1">Masuk</p>
+                  </div>
+                </td>
                 <td>Meta</td>
                 <td>11LP2819402KQ23</td>
                 <td>Rp. 123.000</td>
@@ -59,8 +139,14 @@
                             src="{{ asset('icons/Edit.svg') }}"></a>
                 </td>
             </tr>
-            <tr class="align-middle">
+            <tr >
                 <td>12 April 2023</td>
+                <td> 
+                    <div class="d-flex">
+                      <span><img src="{{ asset('icons/Up.svg') }}"></span>
+                    <p class="ps-1">Masuk</p>
+                  </div>
+                </td>
                 <td>Indah</td>
                 <td>11LP4390392YQ324</td>
                 <td>Rp. 300.000</td>
@@ -75,21 +161,81 @@
                 </td>
             </tr>
         </tbody>
-    </table>
+    </table> --}}
 </div>
-   
   </div>
 
+@endsection
+
+@section('script')
+
   <script>
-     $(document).ready(function () {
-            $('#attendanceOverbreak').DataTable({
-                searching: false,
-                lengthChange: false,
-                "bSort": true,
-                pageLength: 10,
-                responsive: true,
-            });
+      const loadSpin = `<div class="d-flex justify-content-center align-items-center mt-5">
+                <div class="spinner-border d-flex justify-content-center align-items-center text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+            </div> `;
+
+    // get list Team
+    const getListDataHarian = () => {
+        const txtSearch = $('#txSearch').val();
+
+        $.ajax({
+                url: "{{ route('getlistDataHarian') }}",
+                method: "GET",
+                data: {
+                    txSearch: txtSearch
+                },
+                beforeSend: () => {
+                    $('#containerDataHarian').html(loadSpin)
+                }
+            })
+            .done(res => {
+                $('#containerDataHarian').html(res)
+                $('#tableDataHarian').DataTable({
+                    searching: false,
+                    lengthChange: false,
+                    "bSort": true,
+                    "aaSorting": [],
+                    pageLength: 7,
+                    "lengthChange": false,
+                    responsive: true,
+                    language: { search: "" }
+                });
+            })
+    }
+
+    getListDataHarian();
+
+    $('#txSearch').keyup(function(e) {
+        var inputText = $(this).val();
+        if (inputText.length >= 2 || inputText.length == 0) {
+          getListDataHarian();
+        }
+    })
+
+
+    $(document).on('click', '#btnTambahDatManual', function(e){
+        e.preventDefault()
+        flatpickr("#tanggalData", {
+            // enableTime: true,
+            // noCalendar: true,
+            // time_24hr: true,
+            dateFormat: "d/m/Y",
+            defaultDate: new Date(),
         });
+
+        $( '#pelanggan' ).select2( {
+            theme: "bootstrap-5",
+            dropdownParent: $('#modalTambahHarian'),
+        });
+
+
+        $('#modalTambahHarian').modal('show');
+      });
+    
+
+
+
+
   </script>
 
   @endsection
