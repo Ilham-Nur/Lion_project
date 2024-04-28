@@ -41,6 +41,7 @@ Route::get('/user', [UserController::class, 'index'])->name('menuuser');
 
 //Menu User
 Route::get('/tagihan', [TagihanController::class, 'index'])->name('menutagihan');
+Route::get('/tagihan/getlisttagihan', [TagihanController::class, 'getlistTagihan'])->name('getlistTagihan');
 
 
 // Route::get('/dashboard',  [DashboardController::class, 'index'])->middleware('role:admin');

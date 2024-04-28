@@ -5,36 +5,6 @@
 @section('main')
 
 <div class="container-fluid">
-<!-- Modal Tambah-->
-<div class="modal fade" id="modalTambahTagihan" tabindex="-1" aria-labelledby="modalTambahTagihanLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="modalTambahTagihanLabel">Tambah Tagihan</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="mt-3">
-                <label for="namaTagihan" class="form-label fw-bold">Nama Tagihan</label>
-                <input type="text" class="form-control" id="namaTagihan" value="">
-            </div>
-            <div class="mt-3">
-                <label for="noTelpon" class="form-label fw-bold">No. Telpon</label>
-                <input type="text" class="form-control numericInput" id="noTelpon" value="">
-            </div>
-            <div class="mt-3">
-                <label for="alamat" class="form-label fw-bold">Alamat</label>
-                <textarea class="form-control" id="alamatTagihan" rows="3"></textarea>
-            </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-          <button type="button" id="submitTagihan" class="btn btn-primary">Submit</button>
-        </div>
-      </div>
-    </div>
-</div>
-<!--End Modal Tambah-->
 
 <div class="col-sm-12">
     <div>
@@ -47,16 +17,10 @@
         <div class="d-flex gap-3">
             {{-- Search --}}
             <input id="txSearch" type="text" style="width: 250px; min-width: 250px;"class="form-control rounded-3" placeholder="Search">
-            {{-- <div class="d-flex align-items-center gap-1">
-                <button id="monthEvent" class="btn btn-light form-control"  style="border: 1px solid #e9ecef;">
-                    <span id="calendarTitle" class="fs-4"></span>
-                </button>
-            </div> --}}
+            {{-- Filter Hari --}}
             <input type="text" id="hariPicker" placeholder="Pilih hari">
+            {{-- Reset --}}
             <button type="button" class="btn btn-outline-secondary" id="btnResetDefault" onclick="window.location.reload()">
-            {{-- <button type="button" class="btn btn-outline-secondary" onclick="window.location.reload()">
-                <div class="d-flex align-items-center gap-1">
-                    <i class='bx bx-refresh bx-rotate-90 fs-4'></i>--}}
                     Reset
             </button>
         </div>
@@ -67,12 +31,12 @@
 
   </div>
   <div id="containerTagihan" class="col-sm-12 mt-3">
-    <table id="tableTagihan" class="table table-responsive table-hover">
+    {{-- <table id="tableTagihan" class="table table-responsive table-hover">
         <thead>
             <tr class="table-primary" >
                 <th scope="col">No Resi</th>
                 <th scope="col">Tanggal</th>
-                <th scope="col">Pelanggan</th>
+                <th scope="col">Tagihan</th>
                 <th scope="col">Ongkir</th>
                 <th scope="col">Pajak</th>
                 <th scope="col">Action</th>
@@ -91,7 +55,7 @@
 
             </tr>
         </tbody>
-    </table>
+    </table> --}}
 </div>
 </div>
 
@@ -100,57 +64,60 @@
 
 @section('script')
 <script>
-    // $(document).ready(function() {
-    //         function getCurrentMonth() {
-    //             const months = [
-    //                 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    //                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    //             ];
+const loadSpin = `<div class="d-flex justify-content-center align-items-center mt-5">
+                <div class="spinner-border d-flex justify-content-center align-items-center text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+            </div> `;
 
-    //             const currentDate = new Date();
-    //             const currentMonth = months[currentDate.getMonth()];
-    //             const currentYear = currentDate.getFullYear();
+const getListTagihan = (txSearch, selectedDate) => {
+    $.ajax({
+        url: "{{ route('getlistTagihan') }}",
+        method: "GET",
+        data: {
+            txSearch: txSearch,
+            filter: selectedDate
+        },
+        beforeSend: () => {
+            $('#containerTagihan').html(loadSpin)
+        }
+    })
+    .done(res => {
+        $('#containerTagihan').html(res)
+        $('#tableTagihan').DataTable({
+            searching: false,
+            lengthChange: false,
+            "bSort": true,
+            "aaSorting": [],
+            pageLength: 7,
+            "lengthChange": false,
+            responsive: true,
+            language: { search: "" }
+        });
+    });
+}
 
-    //             return `${currentMonth} ${currentYear}`;
-    //         }
+flatpickr("#hariPicker", {
+    dateFormat: "Y-m-d",
+    altInput: true,
+    altFormat: "j F Y",
+    defaultDate: "today",
+    onChange: function(selectedDates, dateStr, instance) {
+        selectedDate = dateStr;
+        console.log("Nilai input berubah menjadi: " + selectedDate);
+        getListTagihan($('#txSearch').val(), selectedDate);
+    }
+});
 
-    //         $('#calendarTitle').text(getCurrentMonth());
 
-    //         $('#monthEvent').flatpickr({
-    //             plugins: [
-    //                 new monthSelectPlugin({
-    //                     shorthand: true,
-    //                     dateFormat: "M Y",
-    //                     altFormat: "M Y",
-    //                     theme: "light"
-    //                 })
-    //             ],
-    //             onChange: function(selectedDates, dateStr, instance) {
-    //                 const selectedDate = selectedDates[0];
-    //                 const selectedMonth = instance.formatDate(selectedDate, "M Y");
+getListTagihan($('#txSearch').val(), $('#hariPicker').val());
 
-    //                 $('#calendarTitle').text(selectedMonth);
-    //             }
-    //         });
-    //     });
+$('#txSearch').keyup(function(e) {
+    var inputText = $(this).val();
+    if (inputText.length >= 2 || inputText.length == 0) {
+        getListTagihan(inputText, $('#hariPicker').val());
+    }
+});
 
-    flatpickr("#hariPicker", {
-    dateFormat: "l", // Menampilkan nama hari
-    altFormat: "Y-m-d", // Format tanggal alternatif
-    altInput: true, // Mengaktifkan input tanggal alternatif
-    defaultDate: "today" // Set default tanggal ke hari ini
-  });
 
-     $('#tableTagihan').DataTable({
-                    searching: false,
-                    lengthChange: false,
-                    "bSort": true,
-                    "aaSorting": [],
-                    pageLength: 7,
-                    "lengthChange": false,
-                    responsive: true,
-                    language: { search: "" }
-                });
 </script>
 
 
