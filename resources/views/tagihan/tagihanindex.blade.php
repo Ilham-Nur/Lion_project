@@ -52,6 +52,7 @@
                     <span id="calendarTitle" class="fs-4"></span>
                 </button>
             </div> --}}
+            <input type="text" id="hariPicker" placeholder="Pilih hari">
             <button type="button" class="btn btn-outline-secondary" id="btnResetDefault" onclick="window.location.reload()">
             {{-- <button type="button" class="btn btn-outline-secondary" onclick="window.location.reload()">
                 <div class="d-flex align-items-center gap-1">
@@ -132,6 +133,13 @@
     //             }
     //         });
     //     });
+
+    flatpickr("#hariPicker", {
+    dateFormat: "l", // Menampilkan nama hari
+    altFormat: "Y-m-d", // Format tanggal alternatif
+    altInput: true, // Mengaktifkan input tanggal alternatif
+    defaultDate: "today" // Set default tanggal ke hari ini
+  });
 
      $('#tableTagihan').DataTable({
                     searching: false,
