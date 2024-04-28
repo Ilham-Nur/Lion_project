@@ -3,17 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 
-class DashboardController extends Controller
+class UserController extends Controller
 {
-    //Halaman Dashboard
+
     public function index()
     {
-        return view('dashboard/dashboardindex');
+        return view('user/userindex');
 
     }
-
-
 }

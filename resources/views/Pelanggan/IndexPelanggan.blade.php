@@ -69,7 +69,13 @@
 </div>
 <!-- End Modal Edit-->
 
-  <div class="row">
+<div class="col-sm-12">
+    <div>
+        <h3 class=" mt-3 fw-bold">Pelanggan Tetap</h3>
+    </div>
+</div>
+
+  <div class="row mt-3">
     <div class="d-flex gap-3 justify-content-between">
       {{-- Search --}}
       <input id="txSearch" type="text" style="width: 250px; min-width: 250px;"class="form-control rounded-3" placeholder="Search">
@@ -161,7 +167,7 @@
             }
         });
     });
-    
+
      $(document).on('click', '#btnTambahPelanggan', function(e){
         e.preventDefault()
         $('#modalTambahPelanggan').modal('show');
@@ -286,7 +292,7 @@
 
         $(document).on('click', '.btnDeletePelanggan', function(e){
             let id = $(this).data('id');
-            
+
             Swal.fire({
                     title: "Apakah Kamu Yakin?",
                     icon: 'question',

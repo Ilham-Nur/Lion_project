@@ -12,23 +12,23 @@ class PelangganController extends Controller
 
     public function index()
     {
-        return view('karyawan/Pelanggan/indexPelanggan');
-      
+        return view('Pelanggan/indexPelanggan');
+
     }
 
     public function getlistPelanggan(Request $request)
     {
         $txSearch = '%' . strtoupper(trim($request->txSearch)) . '%';
 
-        $q = "SELECT * FROM tbl_pelanggan 
-        WHERE UPPER(nama) LIKE UPPER('$txSearch') 
-        OR UPPER(no_telpon) LIKE UPPER('$txSearch') 
+        $q = "SELECT * FROM tbl_pelanggan
+        WHERE UPPER(nama) LIKE UPPER('$txSearch')
+        OR UPPER(no_telpon) LIKE UPPER('$txSearch')
         OR UPPER(alamat) LIKE UPPER('$txSearch')
         ORDER BY id Desc    ";
 
         $data = DB::select($q);
 
-    
+
 
         $output = '<table id="tablePelanggan" class="table table-responsive table-hover">
         <thead>
@@ -57,7 +57,7 @@ class PelangganController extends Controller
 
         $output .= '</tbody></table>';
          return $output;
-        
+
     }
 
 
@@ -66,14 +66,14 @@ class PelangganController extends Controller
         $nama = $request->input('namaPelanggan');
         $notelp = $request->input('noPelanggan');
         $alamat = $request->input('alamatPelanggan');
-        
+
         try {
             DB::table('tbl_pelanggan')->insert([
-                'nama' => $nama, 
-                'no_telpon' => $notelp, 
-                'alamat' => $alamat 
+                'nama' => $nama,
+                'no_telpon' => $notelp,
+                'alamat' => $alamat
             ]);
-    
+
             // Mengembalikan respons JSON jika berhasil
             return response()->json(['status' => 'success', 'message' => 'Pelanggan berhasil ditambahkan'], 200);
         } catch (\Exception $e) {
@@ -92,11 +92,11 @@ class PelangganController extends Controller
             DB::table('tbl_pelanggan')
             ->where('id', $idedit)
             ->update([
-                'nama' => $nameedit, 
-                'no_telpon' => $noPelangganEdit, 
-                'alamat' => $alamatPelangganEdit 
+                'nama' => $nameedit,
+                'no_telpon' => $noPelangganEdit,
+                'alamat' => $alamatPelangganEdit
             ]);
-    
+
             // Mengembalikan respons JSON jika berhasil
             return response()->json(['status' => 'success', 'message' => 'Data Pelanggan berhasil diupdate'], 200);
         } catch (\Exception $e) {

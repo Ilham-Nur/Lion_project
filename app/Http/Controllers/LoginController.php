@@ -13,7 +13,7 @@ class LoginController extends Controller
     public function index()
     {
         return view('login/loginindex');
-      
+
     }
 
     public function login(Request $request)
@@ -32,23 +32,22 @@ class LoginController extends Controller
             return response()->json(['message' => 'Data not found'], 401);
         }
 
-        if ($user->role_id === 1){
-            return response()->json(['role_id' => $user->role_id, 'redirect_url' => 'admin/dashboard']);
-        } else if ($user->role_id === 2) {
-            return response()->json(['role_id' => $user->role_id, 'redirect_url' => 'karyawan/dashboard']);
-        } else {
+        return response()->json(['redirect_url' => '/dashboardnew']);
 
-        }
+        // if ($user->role_id === 1){
+        //     return response()->json(['role_id' => $user->role_id, 'redirect_url' => 'admin/dashboard']);
+        // } else if ($user->role_id === 2) {
+        //     return response()->json(['role_id' => $user->role_id, 'redirect_url' => '/dashboard']);
+        // } else {
+
+        // }
 
 
     }
-    
-
-
 
     public function logout()
     {
-        return redirect('/');   
+        return redirect('/');
     }
 
 }

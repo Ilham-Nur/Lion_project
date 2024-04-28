@@ -1,6 +1,6 @@
 @extends('layout.header')
 
-@section('title', 'Dashboard')
+@section('title', 'Update Harian')
 
 @section('main')
 
@@ -61,23 +61,27 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-        <button type="button" id="submitpelanggan" class="btn btn-primary">Submit</button>
+        <button type="button" id="submitDataManual" class="btn btn-primary">Submit</button>
       </div>
     </div>
   </div>
 </div>
 <!--End Modal Tambah-->
 
+<div class="col-sm-12">
+    <div>
+        <h3 class=" mt-3 fw-bold">Update Harian</h3>
+    </div>
+</div>
 
 
-
-  <div class="row">
+  <div class="row mt-3">
     <div class="d-flex gap-3 justify-content-between">
       {{-- Search --}}
       <input id="txSearch" type="text" style="width: 250px; min-width: 250px;"class="form-control rounded-3" placeholder="Search">
       <div class="d-flex gap-3">
         <button type="button" id="" class="btn btn-primary">Import Data Harian</button>
-        <button type="button" id="btnTambahDatManual" class="btn btn-primary">Tambah Data Harian</button>
+        <button type="button" id="btnTambahDataManual" class="btn btn-primary">Tambah Data Harian</button>
       </div>
   </div>
   <div id="containerDataHarian" class="col-sm-12 mt-3">
@@ -102,7 +106,7 @@
                     <span><img src="{{ asset('icons/Down.svg') }}"></span>
                     <p class="ps-1">Keluar</p>
                   </div>
-                 
+
                 </td>
                 <td>Beli Lakban</td>
                 <td>-</td>
@@ -130,7 +134,7 @@
                 <td>11LP2819402KQ23</td>
                 <td>Rp. 123.000</td>
                 <td>Rp. 50.000</td>
-                <td>  
+                <td>
                     <span class="badge text-bg-success">Transfer</span>
                 <td>
                     <a class="btn btnDetailAttendance" data-bs-toggle="modal">
@@ -141,7 +145,7 @@
             </tr>
             <tr >
                 <td>12 April 2023</td>
-                <td> 
+                <td>
                     <div class="d-flex">
                       <span><img src="{{ asset('icons/Up.svg') }}"></span>
                     <p class="ps-1">Masuk</p>
@@ -151,7 +155,7 @@
                 <td>11LP4390392YQ324</td>
                 <td>Rp. 300.000</td>
                 <td>Rp. 35.000</td>
-                <td>  
+                <td>
                     <span class="badge text-bg-danger">Belum bayar</span>
                 <td>
                     <a class="btn btnDetailAttendance" data-bs-toggle="modal">
@@ -213,7 +217,7 @@
     })
 
 
-    $(document).on('click', '#btnTambahDatManual', function(e){
+    $(document).on('click', '#btnTambahDataManual', function(e){
         e.preventDefault()
         flatpickr("#tanggalData", {
             // enableTime: true,
@@ -231,7 +235,70 @@
 
         $('#modalTambahHarian').modal('show');
       });
-    
+
+
+      $(document).ready(function () {
+            $("#submitDataManual").click(function (e) {
+                e.preventDefault();
+
+                let namaPelangganEdit = $('#tanggalData').val();
+                $('input[name="jenisTransaksi"]').change(function(){
+                    let jenisTransaksi  = $(this).val();
+                    if(value === "pemasukan") {
+                        value = "Masuk";
+                    } else if(value === "pengeluaran") {
+                        value = "Keluar";
+                    }
+                    console.log("Nilai yang dipilih: " + jenisTransaksi);
+                });
+                const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                // Swal.fire({
+                //     title: "Apakah Kamu Yakin?",
+                //     icon: 'question',
+                //     showCancelButton: true,
+                //     confirmButtonColor: '#5D87FF',
+                //     cancelButtonColor: '#49BEFF',
+                //     confirmButtonText: 'Ya',
+                //     cancelButtonText: 'Tidak',
+                //     reverseButtons: true
+                // }).then((result) => {
+                //     if (result.isConfirmed) {
+                //             $.ajax({
+                //             type: "POST",
+                //             url: "",
+                //             data: {
+                //                 id : idEdit,
+                //                 namaPelangganEdit : namaPelangganEdit,
+                //                 noPelangganEdit : noPelangganEdit,
+                //                 alamatPelangganEdit : alamatPelangganEdit,
+                //                 _token : csrfToken
+                //             },
+                //             success: function (response) {
+                //                 if (response.status === 'success') {
+                //                     Swal.fire({
+                //                         title: "Berhasil Update Pelanggan",
+                //                         icon: "success"
+                //                     });
+                //                     getListPelanggan();
+                //                     $('#modalEditPelanggan').modal('hide');
+                //                 } else {
+                //                     Swal.fire({
+                //                         title: "Gagal Menambahkan Pelanggan",
+                //                         icon: "error"
+                //                     });
+                //                 }
+                //             }
+                //         });
+                //     }
+                // })
+            });
+        });
+
+
+
+
+
 
 
 

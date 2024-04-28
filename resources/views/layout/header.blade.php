@@ -22,8 +22,16 @@ data-sidebar-position="fixed" data-header-position="fixed">
       <ul id="sidebarnav">
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">Home</span>
+          <span class="hide-menu">Menu</span>
         </li>
+        <li class="sidebar-item">
+            <a class="sidebar-link" href="{{route('dashboard')}}" aria-expanded="false">
+              <span>
+                <i class="ti ti-layout-dashboard"></i>
+              </span>
+              <span class="hide-menu">Dashboard</span>
+            </a>
+          </li>
         <li class="sidebar-item">
           <a class="sidebar-link" href="{{route('menukaryawan')}}" aria-expanded="false">
             <span>
@@ -40,23 +48,23 @@ data-sidebar-position="fixed" data-header-position="fixed">
             <span class="hide-menu">Pelanggan Tetap</span>
           </a>
         </li>
-       {{-- <li class="sidebar-item">
-          <a class="sidebar-link" href="#" aria-expanded="false">
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{{ route('menutagihan') }}" aria-expanded="false">
             <span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
             </span>
-            <span class="hide-menu">Menu 1</span>
+            <span class="hide-menu">Tagihan</span>
           </a>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" href="#" aria-expanded="false">
+          <a class="sidebar-link" href="{{ route('menuuser')}}" aria-expanded="false">
             <span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
             </span>
-            <span class="hide-menu">Menu 2</span>
+            <span class="hide-menu">User</span>
           </a>
         </li>
-        <li class="nav-small-cap">
+        {{--<li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">UI COMPONENTS</span>
         </li>
@@ -140,7 +148,7 @@ data-sidebar-position="fixed" data-header-position="fixed">
             <span class="hide-menu">Sample Page</span>
           </a>
         </li> --}}
-  </ul> 
+  </ul>
     {{-- <div class="unlimited-access hide-menu bg-light-primary position-relative mb-7 mt-5 rounded">
         <div class="d-flex">
           <div class="unlimited-access-title me-3">
@@ -170,10 +178,12 @@ data-sidebar-position="fixed" data-header-position="fixed">
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link nav-icon-hover" href="javascript:void(0)">
+          {{-- <a class="nav-link nav-icon-hover" href="javascript:void(0)">
             <i class="ti ti-bell-ringing"></i>
             <div class="notification bg-primary rounded-circle"></div>
-          </a>
+          </a> --}}
+
+          <h4>Selamat Datang Admin</h4>
         </li>
       </ul>
       <div class="navbar-collapse justify-content-end px-0" id="navbarNav">

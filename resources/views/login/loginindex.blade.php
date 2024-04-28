@@ -50,7 +50,7 @@
       }
     }
   </style>
- 
+
   <section class="vh-100">
     <div class="container-fluid h-custom">
       <div class="row d-flex justify-content-center align-items-center h-100">
@@ -127,7 +127,7 @@
                 showMessage("error", "Masukkan Username/Badge");
             } else if (!password) {
                 showMessage("error", "Masukkan Password");
-            }  
+            }
 
             if (email && password ) {
                 $.ajax({
@@ -138,18 +138,19 @@
                         "password": password,
                     },
                     success: function (response) {
-                          if (response.role_id === 1) {
-                              window.location.href = response.redirect_url;
-                          } else if (response.role_id === 2) {
-                              window.location.href = response.redirect_url;
-                          } else {
-                            showMessage("error", "User Tidak Memiliki Role");
-                          }
+                        //   if (response.role_id === 1) {
+                        //       window.location.href = response.redirect_url;
+                        //   } else if (response.role_id === 2) {
+                        //       window.location.href = response.redirect_url;
+                        //   } else {
+                        //     showMessage("error", "User Tidak Memiliki Role");
+                        //   }
+                        window.location.href = response.redirect_url;
                       },
                     error: function(xhr, status, error) {
                         if (xhr.status === 401) {
                           showMessage("error", "User Tidak Ditemukan");
-                        } 
+                        }
                       }
                 });
             }
