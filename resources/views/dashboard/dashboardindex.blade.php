@@ -13,14 +13,14 @@
               <div class="mb-3 mb-sm-0">
                 <h5 class="card-title fw-semibold">Chart Pendapatan</h5>
               </div>
-              <div>
-                <select class="form-select">
-                  <option value="1">March 2023</option>
-                  <option value="2">April 2023</option>
-                  <option value="3">May 2023</option>
-                  <option value="4">June 2023</option>
-                </select>
-              </div>
+              <div class="d-flex align-items-center gap-1">
+                <button id="monthEvent" class="btn btn-light form-control"  style="border: 1px solid #e9ecef;">
+                    <span id="calendarTitle" class="fs-4"></span>
+                </button>
+                <button type="button" class="btn btn-outline-secondary" id="btnResetDefault" onclick="window.location.reload()">
+                    Reset
+                </button>
+            </div>
             </div>
             <div id="chart" style="width: 100%;"></div>
           </div>
@@ -88,157 +88,135 @@
 
 @section('script')
 <script>
-     var options = {
-          series: [{
-          name: 'April',
-          data: [{
-              x: 1996,
-              y: 322
-            },
-            {
-              x: 1997,
-              y: 324
-            },
-            {
-              x: 1998,
-              y: 329
-            },
-            {
-              x: 1999,
-              y: 342
-            },
-            {
-              x: 2000,
-              y: 348
-            },
-            {
-              x: 2001,
-              y: 334
-            },
-            {
-              x: 2002,
-              y: 325
-            },
-            {
-              x: 2003,
-              y: 316
-            },
-            {
-              x: 2004,
-              y: 318
-            },
-            {
-              x: 2005,
-              y: 330
-            },
-            {
-              x: 2006,
-              y: 355
-            },
-            {
-              x: 2007,
-              y: 366
-            },
-            {
-              x: 2008,
-              y: 337
-            },
-            {
-              x: 2009,
-              y: 352
-            },
-            {
-              x: 2010,
-              y: 377
-            },
-            {
-              x: 2011,
-              y: 383
-            },
-            {
-              x: 2012,
-              y: 344
-            },
-            {
-              x: 2013,
-              y: 366
-            },
-            {
-              x: 2014,
-              y: 389
-            },
-            {
-              x: 2015,
-              y: 334
-            }
-          ]
-        }],
-          chart: {
-          type: 'area',
-          height: 350 ,
-          zoom: {
-            enabled: false
-          }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          curve: 'straight'
-        },
-        xaxis: {
-          type: 'datetime',
-          axisBorder: {
-            show: false
-          },
-          axisTicks: {
-            show: false
-          }
-        },
-        yaxis: {
-          tickAmount: 4,
-          floating: false,
+  var datesArray = [];
+    for (var i = 1; i <= 30; i++) {
+        var currentDate = new Date(2024, 3, i);
+        var randomY = Math.floor(Math.random() * (1000000 - 500000 + 1)) + 500000;
+        datesArray.push({
+            x: currentDate,
+            y: randomY
+        });
+    }
 
-          labels: {
+var options = {
+    series: [{
+        name: 'April',
+        data: datesArray
+    }],
+    chart: {
+        type: 'area',
+        height: 350,
+        zoom: {
+            enabled: false
+        }
+    },
+    dataLabels: {
+        enabled: false
+    },
+    stroke: {
+        curve: 'straight'
+    },
+    xaxis: {
+    type: 'datetime',
+    labels: {
+        datetimeUTC: false, // non-UTC datetime
+        format: 'dd MMM', // format tanggal yang sesuai
+        style: {
+            colors: '#8e8da4'
+        }
+    }
+},
+
+    yaxis: {
+        tickAmount: 4,
+        floating: false,
+        labels: {
             style: {
-              colors: '#8e8da4',
+                colors: '#8e8da4',
             },
             offsetY: -7,
             offsetX: 0,
-          },
-          axisBorder: {
+            formatter: function (val) {
+                return "Rp" + val.toLocaleString(); // format uang
+            }
+        },
+        axisBorder: {
             show: false,
-          },
-          axisTicks: {
+        },
+        axisTicks: {
             show: false
-          }
+        }
+    },
+    fill: {
+        opacity: 0.5
+    },
+    tooltip: {
+        x: {
+            format: "dd MMM", // format tanggal yang sesuai
         },
-        fill: {
-          opacity: 0.5
-        },
-        tooltip: {
-          x: {
-            format: "yyyy",
-          },
-          fixed: {
+        fixed: {
             enabled: false,
             position: 'topRight'
-          }
-        },
-        grid: {
-          yaxis: {
+        }
+    },
+    grid: {
+        yaxis: {
             lines: {
-              offsetX: -30
+                offsetX: -30
             }
-          },
-          padding: {
-            left: 20
-          }
         },
-        };
+        padding: {
+            left: 20
+        }
+    },
+};
 
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
+var chart = new ApexCharts(document.querySelector("#chart"), options);
+chart.render();
+
+
+function getCurrentMonth() {
+        const months = [
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ];
+
+        const currentDate = new Date();
+        const currentMonth = months[currentDate.getMonth()];
+        const currentYear = currentDate.getFullYear();
+
+        return `${currentMonth} ${currentYear}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarTitle = document.getElementById('calendarTitle');
+        calendarTitle.textContent = getCurrentMonth();
+    });
+
+
+    const monthFilterInput = document.getElementById('monthEvent');
+
+    const flatpickrInstance = flatpickr(monthFilterInput, {
+        plugins: [
+            new monthSelectPlugin({
+                shorthand: true,
+                dateFormat: "M Y",
+                altFormat: "M Y",
+                theme: "light"
+            })
+        ],
+        onChange: function(selectedDates, dateStr, instance) {
+            const selectedDate = selectedDates[0];
+
+            const selectedMonth = instance.formatDate(selectedDate, "M Y");
+
+            const calendarTitle = document.getElementById('calendarTitle');
+            calendarTitle.textContent = selectedMonth;
+        }
+    });
+
+
+
 </script>
 
 @endsection

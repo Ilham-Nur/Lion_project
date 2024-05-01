@@ -53,7 +53,11 @@
 
   <section class="vh-100">
     <div class="container-fluid h-custom">
-      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="row text-center pt-5">
+            <H2>Sistem Monitoring Keuangan</H2>
+            <H2>Lion Parcel Glory Center</H2>
+        </div>
+      <div class="row d-flex justify-content-center align-items-center">
         <div class="col-md-9 col-lg-6 col-xl-5">
           <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid"
             alt="Sample image">
