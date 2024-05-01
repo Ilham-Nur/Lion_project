@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 24, 2024 at 06:18 PM
+-- Generation Time: May 01, 2024 at 10:10 PM
 -- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -31,21 +31,13 @@ CREATE TABLE `tbl_harian` (
   `id` int(11) NOT NULL,
   `tanggal` date NOT NULL,
   `jenis_pembayaran` text NOT NULL,
-  `pelanggan_id` int(11) DEFAULT NULL,
+  `pelanggan` text DEFAULT NULL,
   `keterangan` text NOT NULL,
   `no_resi` varchar(255) DEFAULT NULL,
-  `ongkir` decimal(30,0) DEFAULT NULL,
+  `ongkir` decimal(30,0) NOT NULL,
   `pajak` decimal(30,0) DEFAULT NULL,
   `pembayaran_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tbl_harian`
---
-
-INSERT INTO `tbl_harian` (`id`, `tanggal`, `jenis_pembayaran`, `pelanggan_id`, `keterangan`, `no_resi`, `ongkir`, `pajak`, `pembayaran_id`) VALUES
-(1, '2024-04-24', 'Masuk', 2, 'bayar', '11LP1713942142697', 20000, 30000, 1),
-(2, '2024-04-24', 'Keluar', 3, 'Bayar Resi', '11LP1713938080829', 60000, 29000, 2);
 
 -- --------------------------------------------------------
 
@@ -68,8 +60,7 @@ INSERT INTO `tbl_pelanggan` (`id`, `nama`, `no_telpon`, `alamat`) VALUES
 (1, 'Meta', '08123493294324', 'Jl. Cendrawasih no 13 blok a'),
 (2, 'Lina', '0213940234', 'PT Seraya Pakmur Perdana Kawansan Industri Tunas Harapan'),
 (3, 'Pije', '08212238343', 'Apartment Victoria'),
-(7, 'K Chris', '23455436534', 'KDA Batam Center cluster Rajawali'),
-(8, 'Hikmah', '08239409234', 'Depan Masjid Lama');
+(7, 'K Chris', '23455436534', 'KDA Batam Center cluster Rajawali');
 
 -- --------------------------------------------------------
 
@@ -113,6 +104,21 @@ INSERT INTO `tbl_role` (`id`, `role`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_tagihan`
+--
+
+CREATE TABLE `tbl_tagihan` (
+  `id` int(11) NOT NULL,
+  `no_resi` text DEFAULT NULL,
+  `tanggal` date DEFAULT NULL,
+  `pengirim` text DEFAULT NULL,
+  `ongkir` decimal(10,0) DEFAULT NULL,
+  `pajak` decimal(10,0) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_user`
 --
 
@@ -129,10 +135,9 @@ CREATE TABLE `tbl_user` (
 --
 
 INSERT INTO `tbl_user` (`id`, `username`, `badge`, `password`, `role_id`) VALUES
-(1, 'ilhamnur', '0001', 'ilonoer123', 1),
-(2, 'wulan', '0003', '12345', 2),
-(6, 'nurindah', '0002', 'ilonoer447522', 1),
-(8, 'tyo', '0004', '12345', 1);
+(1, 'Ilhamnur', '0001', 'ilonoer123', 1),
+(2, 'Wulan', '0003', '12345', 2),
+(6, 'NurIndah', '0002', 'ilonoer447522', 1);
 
 --
 -- Indexes for dumped tables
@@ -143,8 +148,7 @@ INSERT INTO `tbl_user` (`id`, `username`, `badge`, `password`, `role_id`) VALUES
 --
 ALTER TABLE `tbl_harian`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `pembayaran_id` (`pembayaran_id`),
-  ADD KEY `pelanggan_id` (`pelanggan_id`);
+  ADD KEY `pembayaran_id` (`pembayaran_id`);
 
 --
 -- Indexes for table `tbl_pelanggan`
@@ -166,6 +170,12 @@ ALTER TABLE `tbl_role`
   ADD UNIQUE KEY `role` (`role`);
 
 --
+-- Indexes for table `tbl_tagihan`
+--
+ALTER TABLE `tbl_tagihan`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
@@ -180,7 +190,7 @@ ALTER TABLE `tbl_user`
 -- AUTO_INCREMENT for table `tbl_harian`
 --
 ALTER TABLE `tbl_harian`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_pelanggan`
@@ -201,6 +211,12 @@ ALTER TABLE `tbl_role`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `tbl_tagihan`
+--
+ALTER TABLE `tbl_tagihan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tbl_user`
 --
 ALTER TABLE `tbl_user`
@@ -214,8 +230,7 @@ ALTER TABLE `tbl_user`
 -- Constraints for table `tbl_harian`
 --
 ALTER TABLE `tbl_harian`
-  ADD CONSTRAINT `tbl_harian_ibfk_1` FOREIGN KEY (`pembayaran_id`) REFERENCES `tbl_pembayaran` (`id`),
-  ADD CONSTRAINT `tbl_harian_ibfk_2` FOREIGN KEY (`pelanggan_id`) REFERENCES `tbl_pelanggan` (`id`);
+  ADD CONSTRAINT `tbl_harian_ibfk_1` FOREIGN KEY (`pembayaran_id`) REFERENCES `tbl_pembayaran` (`id`);
 
 --
 -- Constraints for table `tbl_user`
