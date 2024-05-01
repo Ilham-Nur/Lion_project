@@ -42,7 +42,7 @@
     </div>
 </div>
 
-  <div class="row mt-3">
+<div class="row mt-3">
     <div class="d-flex gap-3 justify-content-between">
       {{-- Search --}}
       <input id="txSearch" type="text" style="width: 250px; min-width: 250px;"class="form-control rounded-3" placeholder="Search">
@@ -51,7 +51,7 @@
       </div>
   </div>
   <div id="containerUser" class="col-sm-12 mt-3">
-    <table id="tableUser" class="table table-responsive table-hover">
+    {{-- <table id="tableUser" class="table table-responsive table-hover">
         <thead>
             <tr class="table-primary" >
                 <th scope="col">Username</th>
@@ -71,10 +71,9 @@
                 <td> <a class="btn btnDetailAttendance" data-bs-toggle="modal">
                     <img src="{{ asset('icons/delete.svg') }}"></a>
                 </td>
-
             </tr>
         </tbody>
-    </table>
+    </table> --}}
 </div>
 </div>
 
@@ -83,7 +82,28 @@
 
 @section('script')
 <script>
-     $('#tableUser').DataTable({
+
+const loadSpin = `<div class="d-flex justify-content-center align-items-center mt-5">
+                <div class="spinner-border d-flex justify-content-center align-items-center text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+            </div> `;
+
+    // get list Team
+    const getListUser = () => {
+        const txtSearch = $('#txSearch').val();
+
+        $.ajax({
+                url: "{{ route('getlistUser') }}",
+                method: "GET",
+                data: {
+                    txSearch: txtSearch
+                },
+                beforeSend: () => {
+                    $('#containerUser').html(loadSpin)
+                }
+            })
+            .done(res => {
+                $('#containerUser').html(res)
+                $('#tableUser').DataTable({
                     searching: false,
                     lengthChange: false,
                     "bSort": true,
@@ -93,6 +113,112 @@
                     responsive: true,
                     language: { search: "" }
                 });
+            })
+    }
+
+    getListUser();
+
+    $('#txSearch').keyup(function(e) {
+        var inputText = $(this).val();
+        if (inputText.length >= 2 || inputText.length == 0) {
+            getListUser();
+        }
+    })
+
+    $(document).on('click', '.btnDeleteUser', function(e){
+            let id = $(this).data('id');
+
+            Swal.fire({
+                    title: "Apakah Kamu Yakin?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#5D87FF',
+                    cancelButtonColor: '#49BEFF',
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                            $.ajax({
+                            type: "GET",
+                            url: "{{route('hapusUser')}}",
+                            data: {
+                                id : id,
+                            },
+                            success: function (response) {
+                                if (response.status === 'success') {
+                                    Swal.fire({
+                                        title: "Berhasil Menghapus User",
+                                        icon: "success"
+                                    });
+                                    getListUser();
+                                } else {
+                                    Swal.fire({
+                                        title: "Gagal Menambahkan User",
+                                        icon: "error"
+                                    });
+                                }
+                            }
+                        });
+                    }
+                })
+            });
+
+    $(document).on('click', '#btnTambahUser', function(e){
+        e.preventDefault()
+
+        $('#modalTambahUser').modal('show');
+       });
+
+       $(document).ready(function () {
+            $("#submitpelanggan").click(function (e) {
+                e.preventDefault();
+
+                let namaPelanggan = $('#namaPelanggan').val();
+                let noPelanggan = $('#noTelpon').val();
+                let alamatPelanggan = $('#alamatPelanggan').val();
+                const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+                Swal.fire({
+                    title: "Apakah Kamu Yakin?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#5D87FF',
+                    cancelButtonColor: '#49BEFF',
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                            $.ajax({
+                            type: "POST",
+                            url: "{{route('tambahPelanggan')}}",
+                            data: {
+                                namaPelanggan : namaPelanggan,
+                                noPelanggan : noPelanggan,
+                                alamatPelanggan : alamatPelanggan,
+                                _token : csrfToken
+                            },
+                            success: function (response) {
+                                if (response.status === 'success') {
+                                    Swal.fire({
+                                        title: "Berhasil Menambahkan Pelanggan",
+                                        icon: "success"
+                                    });
+                                    getListPelanggan();
+                                    $('#modalTambahPelanggan').modal('hide');
+                                } else {
+                                    Swal.fire({
+                                        title: "Gagal Menambahkan Pelanggan",
+                                        icon: "error"
+                                    });
+                                }
+                            }
+                        });
+                    }
+                })
+            });
+        });
 </script>
 
 

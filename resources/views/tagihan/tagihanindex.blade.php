@@ -145,6 +145,45 @@ $('#txSearch').keyup(function(e) {
     }
 });
 
+$(document).on('click', '.btnDeleteTagihan', function(e){
+            let id = $(this).data('id');
+
+            Swal.fire({
+                    title: "Apakah Kamu Yakin?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#5D87FF',
+                    cancelButtonColor: '#49BEFF',
+                    confirmButtonText: 'Ya',
+                    cancelButtonText: 'Tidak',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                            $.ajax({
+                            type: "GET",
+                            url: "{{route('hapusTagihan')}}",
+                            data: {
+                                id : id,
+                            },
+                            success: function (response) {
+                                if (response.status === 'success') {
+                                    Swal.fire({
+                                        title: "Berhasil Menghapus Tagihan",
+                                        icon: "success"
+                                    });
+                                    getListTagihan($('#txSearch').val(), $('#hariPicker').val());
+                                } else {
+                                    Swal.fire({
+                                        title: "Gagal Menambahkan Tagihan",
+                                        icon: "error"
+                                    });
+                                }
+                            }
+                        });
+                    }
+                })
+            });
+
 
 </script>
 <script>

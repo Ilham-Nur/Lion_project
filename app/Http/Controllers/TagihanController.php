@@ -56,7 +56,7 @@ class TagihanController extends Controller
                     <td class="">' . ($item->pajak ? 'Rp. ' . number_format($item->pajak) : '-') .'</td>
 
                     <td>
-                       <a  class="btn btnDeletePelanggan" data-id="' .$item->id .'"><img src="' .asset('icons/delete.svg') .'"></a>
+                       <a  class="btn btnDeleteTagihan" data-id="' .$item->id .'"><img src="' .asset('icons/delete.svg') .'"></a>
                    </td>
                 </tr>
             ';
@@ -65,6 +65,23 @@ class TagihanController extends Controller
         $output .= '</tbody></table>';
          return $output;
 
+    }
+
+    public function hapusTagihan(Request $request)
+    {
+        $id = $request->input('id');
+
+        try {
+            DB::table('tbl_tagihan')
+                ->where('id', $id)
+                ->delete();
+
+            // Jika berhasil, kembalikan respons sukses
+            return response()->json(['status' => 'success', 'message' => 'Tagihan berhasil dihapus'], 200);
+        } catch (\Exception $e) {
+            // Jika terjadi kesalahan, kembalikan respons gagal
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
     }
 
     public function exportTagihan(Request $req)
@@ -76,12 +93,12 @@ class TagihanController extends Controller
         try {
 
             DB::beginTransaction();
-            
+
             $tanggal = $req->tanggal;
             $pelanggan = $req->selectPelanggan;
-            
+
             DB::commit();
-            
+
             return Excel::download(new ExportTagihan($tanggal, $pelanggan), 'ExportTagihan.xlsx');
 
         } catch (\Throwable $th) {

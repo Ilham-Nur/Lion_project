@@ -32,13 +32,17 @@ Route::post('/pelanggantetap/tambahPelanggan', [PelangganController::class, 'tam
 Route::post('/pelanggantetap/updatePelanggan', [PelangganController::class, 'updatePelanggan'])->name('updatePelanggan');
 Route::get('/pelanggantetap/hapusPelanggan', [PelangganController::class, 'hapusPelanggan'])->name('hapusPelanggan');
 
-
-//Menu User
-Route::get('/user', [UserController::class, 'index'])->name('menuuser');
-Route::get('/listPelanggan', [UserController::class, 'listPelanggan'])->name('listPelanggan');
-
-
-//Menu User
+//Menu Tagihan
 Route::get('/tagihan', [TagihanController::class, 'index'])->name('menutagihan');
 Route::get('/exportTagihan', [TagihanController::class, 'exportTagihan'])->name('exportTagihan');
 Route::get('/tagihan/getlisttagihan', [TagihanController::class, 'getlistTagihan'])->name('getlistTagihan');
+Route::get('/tagihan/hapustagihan', [TagihanController::class, 'hapusTagihan'])->name('hapusTagihan');
+
+//Menu User
+Route::get('/user', [UserController::class, 'index'])->name('menuuser');
+Route::get('/user/getlistUser', [UserController::class, 'getlistUser'])->name('getlistUser');
+Route::get('/user/hapusUser', [UserController::class, 'hapusUser'])->name('hapusUser');
+
+Route::get('/listPelanggan', [UserController::class, 'listPelanggan'])->name('listPelanggan');
+
+
