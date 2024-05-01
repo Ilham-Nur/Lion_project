@@ -8,67 +8,144 @@
 
 <!-- Modal Tambah-->
 <div class="modal fade" id="modalTambahHarian" tabindex="-1" aria-labelledby="modalTambahHarianLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="modalTambahHarianLabel">Tambah Manual Data</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-          <div class="mt-3">
-              <label for="namaPelanggan" class="form-label fw-bold">Tanggal</label>
-              <input type="text" class="form-control" id="tanggalData" value="">
-          </div>
-          <div class="mt-3">
-              <label class="form-label fw-bold">Jenis Transaksi</label><br>
-              <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="jenisTransaksi" id="pemasukan" value="pemasukan">
-                  <label class="form-check-label" for="pemasukan">Pemasukan</label>
-              </div>
-              <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="jenisTransaksi" id="pengeluaran" value="pengeluaran">
-                  <label class="form-check-label" for="pengeluaran">Pengeluaran</label>
-              </div>
-          </div>
-          <div class="mt-3">
-              <label for="pelanggan" class="form-label fw-bold">Pelanggan</label>
-              <select class="form-control" id="pelanggan">
-               <option value="">tes</option>
-              </select>
-          </div>
-          <div class="mt-3">
-              <label for="noResi" class="form-label fw-bold">Nomor Resi</label>
-              <input type="text" class="form-control" id="noResi" value="">
-          </div>
-
-          <div class="mt-3">
-              <label for="harga" class="form-label fw-bold">Nominal</label>
-              <input type="number" class="form-control" id="harga" value="">
-          </div>
-          <div class="mt-3">
-              <label for="harga" class="form-label fw-bold">Pajak</label>
-              <input type="number" class="form-control" id="harga" value="">
-          </div>
-          <div class="mt-3">
-              <label for="pembayaran" class="form-label fw-bold">Metode Pembayaran</label>
-              <select class="form-select" id="pembayaran">
-                  <option value="tunai">Tunai</option>
-                  <option value="transfer">Transfer</option>
-                  <option value="kartu_kredit">Kartu Kredit</option>
-              </select>
-          </div>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-        <button type="button" id="submitDataManual" class="btn btn-primary">Submit</button>
+    <div class="modal-dialog modal-dialog-centered  modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalTambahHarianLabel">Tambah Manual Data</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mt-3">
+                        <label for="namaPelanggan" class="form-label fw-bold">Tanggal</label>
+                        <input type="text" class="form-control" id="tanggalData" value="">
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label fw-bold">Jenis Transaksi</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="jenisTransaksi" id="pemasukan" value="pemasukan">
+                            <label class="form-check-label" for="pemasukan">Pemasukan</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="jenisTransaksi" id="pengeluaran" value="pengeluaran">
+                            <label class="form-check-label" for="pengeluaran">Pengeluaran</label>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <label for="pelanggan" class="form-label fw-bold">Pelanggan</label>
+                        <input type="text" class="form-control" id="pelanggan" value="">
+                    </div>
+                    <div class="mt-3">
+                        <label for="keterangan" class="form-label fw-bold">Keterangan</label>
+                        <input type="text" class="form-control" id="keterangan" value="">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mt-3">
+                        <label for="noResi" class="form-label fw-bold">Nomor Resi</label>
+                        <input type="text" class="form-control" id="noResi" value="">
+                    </div>
+                    <div class="mt-3">
+                        <label for="harga" class="form-label fw-bold">Nominal</label>
+                        <input type="number" class="form-control" id="harga" value="">
+                    </div>
+                    <div class="mt-3">
+                        <label for="harga" class="form-label fw-bold">Pajak</label>
+                        <input type="number" class="form-control" id="pajak" value="">
+                    </div>
+                    <div class="mt-3">
+                        <label for="pembayaran" class="form-label fw-bold">Metode Pembayaran</label>
+                        <select class="form-select" id="pembayaran">
+                            <option value="1">Cash</option>
+                            <option value="2">Transfer</option>
+                            <option value="3">Piutang</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="button" id="submitDataManual" class="btn btn-primary">Submit</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
 <!--End Modal Tambah-->
 
-<!-- Modal Tambah-->
+<!-- Modal Edit Data-->
+<div class="modal fade" id="modalEditHarian" tabindex="-1" aria-labelledby="modalEditHarianLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered  modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalEditHarianLabel">Tambah Manual Data</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="hidden" id="editDataId">
+                    <div class="mt-3">
+                        <label for="namaPelanggan" class="form-label fw-bold">Tanggal</label>
+                        <input type="text" class="form-control" id="tanggalDataEdit" value="">
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label fw-bold">Jenis Transaksi</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="jenisTransaksiEdit" id="pemasukanEdit" value="pemasukan">
+                            <label class="form-check-label" for="pemasukan">Pemasukan</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="jenisTransaksiEdit" id="pengeluaranEdit" value="pengeluaran">
+                            <label class="form-check-label" for="pengeluaran">Pengeluaran</label>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <label for="pelanggan" class="form-label fw-bold">Pelanggan</label>
+                        <input type="text" class="form-control" id="pelangganEdit" value="">
+                    </div>
+                    <div class="mt-3">
+                        <label for="keterangan" class="form-label fw-bold">Keterangan</label>
+                        <input type="text" class="form-control" id="keteranganEdit" value="">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mt-3">
+                        <label for="noResi" class="form-label fw-bold">Nomor Resi</label>
+                        <input type="text" class="form-control" id="noResiEdit" value="">
+                    </div>
+                    <div class="mt-3">
+                        <label for="harga" class="form-label fw-bold">Nominal</label>
+                        <input type="number" class="form-control" id="hargaEdit" value="">
+                    </div>
+                    <div class="mt-3">
+                        <label for="harga" class="form-label fw-bold">Pajak</label>
+                        <input type="number" class="form-control" id="pajakEdit" value="">
+                    </div>
+                    <div class="mt-3">
+                        <label for="pembayaran" class="form-label fw-bold">Metode Pembayaran</label>
+                        <select class="form-select" id="pembayaranEdit">
+                            <option value="1">Cash</option>
+                            <option value="2">Transfer</option>
+                            <option value="3">Piutang</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="button" id="submitEditDataManual" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- End Modal Edit Data-->
+
+
+<!-- Modal Import-->
 <div class="modal fade" id="modalImportExcel" tabindex="-1" aria-labelledby="modalImportExcelLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -87,7 +164,7 @@
       </div>
     </div>
   </div>
-  <!--End Modal Tambah-->
+  <!--End Modal Import-->
 
 <div class="col-sm-12">
     <div>
@@ -240,84 +317,6 @@
         }
     })
 
-
-    $(document).on('click', '#btnTambahDataManual', function(e){
-        e.preventDefault()
-        flatpickr("#tanggalData", {
-            // enableTime: true,
-            // noCalendar: true,
-            // time_24hr: true,
-            dateFormat: "d/m/Y",
-            defaultDate: new Date(),
-        });
-
-        $( '#pelanggan' ).select2( {
-            theme: "bootstrap-5",
-            dropdownParent: $('#modalTambahHarian'),
-        });
-
-
-        $('#modalTambahHarian').modal('show');
-      });
-
-
-      $(document).ready(function () {
-            $("#submitDataManual").click(function (e) {
-                e.preventDefault();
-
-                let namaPelangganEdit = $('#tanggalData').val();
-                $('input[name="jenisTransaksi"]').change(function(){
-                    let jenisTransaksi  = $(this).val();
-                    if(value === "pemasukan") {
-                        value = "Masuk";
-                    } else if(value === "pengeluaran") {
-                        value = "Keluar";
-                    }
-                    console.log("Nilai yang dipilih: " + jenisTransaksi);
-                });
-                const csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-                // Swal.fire({
-                //     title: "Apakah Kamu Yakin?",
-                //     icon: 'question',
-                //     showCancelButton: true,
-                //     confirmButtonColor: '#5D87FF',
-                //     cancelButtonColor: '#49BEFF',
-                //     confirmButtonText: 'Ya',
-                //     cancelButtonText: 'Tidak',
-                //     reverseButtons: true
-                // }).then((result) => {
-                //     if (result.isConfirmed) {
-                //             $.ajax({
-                //             type: "POST",
-                //             url: "",
-                //             data: {
-                //                 id : idEdit,
-                //                 namaPelangganEdit : namaPelangganEdit,
-                //                 noPelangganEdit : noPelangganEdit,
-                //                 alamatPelangganEdit : alamatPelangganEdit,
-                //                 _token : csrfToken
-                //             },
-                //             success: function (response) {
-                //                 if (response.status === 'success') {
-                //                     Swal.fire({
-                //                         title: "Berhasil Update Pelanggan",
-                //                         icon: "success"
-                //                     });
-                //                     getListPelanggan();
-                //                     $('#modalEditPelanggan').modal('hide');
-                //                 } else {
-                //                     Swal.fire({
-                //                         title: "Gagal Menambahkan Pelanggan",
-                //                         icon: "error"
-                //                     });
-                //                 }
-                //             }
-                //         });
-                //     }
-                // })
-            });
-        });
   </script>
   <script>
     $(document).on('click', '.btnModalImportExcel', function (e) {
@@ -400,6 +399,7 @@
         }
     });
   </script>
+  @include('update.configupdate')
   @endsection
 
 

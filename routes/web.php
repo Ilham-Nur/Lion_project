@@ -20,6 +20,10 @@ Route::get('/dashboard/chardata', [DashboardController::class, 'getchartdata'])-
 Route::get('/karyawan/dashboard', [UpadateController::class, 'karyawan'])->name('menukaryawan');
 Route::get('insertDataHarian', [UpadateController::class, 'insertDataHarian'])->name('insertDataHarian');
 Route::get('/karyawan/getlistDataHarian', [UpadateController::class, 'getlistDataHarian'])->name('getlistDataHarian');
+Route::get('/karyawan/listpelanggan', [UpadateController::class, 'listPelangganFrom'])->name('listPelangganFrom');
+Route::post('/karyawan/tambahdata', [UpadateController::class, 'tambahData'])->name('tambahData');
+Route::post('/karyawan/updatedata', [UpadateController::class, 'updateData'])->name('updateData');
+Route::get('/karyawan/hapusData', [UpadateController::class, 'hapusData'])->name('hapusData');
 
 // Menu Pelanggan
 Route::get('/pelanggantetap', [PelangganController::class, 'index'])->name('menupelanggan');

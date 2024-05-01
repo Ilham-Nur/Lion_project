@@ -19,13 +19,15 @@ class UpadateController extends Controller
         $q = "SELECT
                     a.id,
                     DATE_FORMAT(a.tanggal, '%d %M %Y') AS tanggal_formatted,
+                    a.tanggal AS tanggalori,
                     a.jenis_pembayaran,
                     a.pelanggan,
                     a.keterangan,
                     a.no_resi,
                     a.ongkir,
                     a.pajak,
-                    c.name AS pembayaran
+                    c.name AS pembayaran,
+                    c.id as id_pembayaran
                 FROM tbl_harian a
                 INNER JOIN tbl_pembayaran c ON c.id = a.pembayaran_id
                 WHERE UPPER(jenis_pembayaran) LIKE UPPER('$txSearch')
@@ -110,7 +112,7 @@ class UpadateController extends Controller
                     <td class="">' . $pajak .'</td>
                     <td class="">' . $label_pembayaran .'</td>
                     <td>
-                       <a  class="btn btnEdiDataHarian" data-id="' .$item->id .'"><img src="' .asset('icons/Edit.svg') .'"></a>
+                       <a  class="btn btnEdiDataHarian" data-id="' .$item->id .'" data-tanggal="' .$item->tanggalori .'" data-jenisbayar="' .$item->jenis_pembayaran .'" data-pelanggan="' .$item->pelanggan .'" data-keterangan="' .$item->keterangan .'" data-noresi="' .$item->no_resi .'" data-nominal="' .$item->ongkir .'" data-pajak="' .$item->pajak .'"  data-pembayaran="' .$item->id_pembayaran .'"><img src="' .asset('icons/Edit.svg') .'"></a>
                        <a  class="btn btnDeleteDataHarian" data-id="' .$item->id .'"><img src="' .asset('icons/delete.svg') .'"></a>
                    </td>
                 </tr>
@@ -166,4 +168,90 @@ class UpadateController extends Controller
             );
         }
     }
+
+    public function tambahData(Request $request)
+    {
+        $tanggal = $request->tanggal;
+        $jenistransaksi = $request->jenistransaksi;
+        $pelanggan = $request->pelanggan;
+        $noresi = $request->noresi;
+        $nominal = $request->nominal;
+        $pajak = $request->pajak;
+        $pembayaran = $request->pembayaran;
+        $keterangan = $request->keterangan;
+
+        try {
+            DB::table('tbl_harian')->insert([
+                'tanggal' => $tanggal,
+                'jenis_pembayaran' => $jenistransaksi,
+                'pelanggan' => $pelanggan,
+                'keterangan' => $keterangan,
+                'no_resi' => $noresi,
+                'ongkir' => $nominal,
+                'pajak' => $pajak,
+                'pembayaran_id' => $pembayaran
+            ]);
+
+            // Mengembalikan respons JSON jika berhasil
+            return response()->json(['status' => 'success', 'message' => 'Data berhasil ditambahkan'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Gagal menambahkan Data: ' . $e->getMessage()], 500);
+        }
+
+    }
+
+    public function updateData(Request $request)
+    {
+        $idEdit = $request->id;
+        $tanggalEdit = $request->tanggal;
+        $jenistransaksiEdit = $request->jenistransaksi;
+        $pelangganEdit = $request->pelanggan;
+        $noresiEdit = $request->noresi;
+        $nominalEdit = $request->nominal;
+        $pajakEdit = $request->pajak;
+        $pembayaranEdit = $request->pembayaran;
+        $keteranganEdit = $request->keterangan;
+
+
+        try {
+            DB::table('tbl_harian')
+            ->where("id", $idEdit)
+            ->update([
+                'tanggal' => $tanggalEdit,
+                'jenis_pembayaran' => $jenistransaksiEdit,
+                'pelanggan' => $pelangganEdit,
+                'keterangan' => $keteranganEdit,
+                'no_resi' => $noresiEdit,
+                'ongkir' => $nominalEdit,
+                'pajak' => $pajakEdit,
+                'pembayaran_id' => $pembayaranEdit
+            ]);
+
+            // Mengembalikan respons JSON jika berhasil
+            return response()->json(['status' => 'success', 'message' => 'Data berhasil diUpdate'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'Gagal update Data: ' . $e->getMessage()], 500);
+        }
+
+
+    }
+
+    public function hapusData(Request $request)
+    {
+        $id = $request->input('id');
+
+        try {
+            DB::table('tbl_harian')
+                ->where('id', $id)
+                ->delete();
+
+            // Jika berhasil, kembalikan respons sukses
+            return response()->json(['status' => 'success', 'message' => 'Data berhasil dihapus'], 200);
+        } catch (\Exception $e) {
+            // Jika terjadi kesalahan, kembalikan respons gagal
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+
 }

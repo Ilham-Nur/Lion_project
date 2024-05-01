@@ -23,7 +23,7 @@ class DashboardController extends Controller
             $formattedFilter = date_create_from_format("M Y", $filter)->format("Y-m");
         }
 
-     $q1 = "SELECT SUM(a.ongkir + a.pajak) AS pemasukan
+        $q1 = "SELECT SUM(COALESCE(a.pajak, a.ongkir)) AS pemasukan
                 FROM tbl_harian a
                 JOIN tbl_pembayaran b ON a.pembayaran_id = b.id
                 WHERE a.jenis_pembayaran = 'Masuk'
@@ -32,7 +32,7 @@ class DashboardController extends Controller
         ";
 
 
-        $q2 = "SELECT SUM(a.ongkir + a.pajak) AS pengeluaran
+        $q2 = "SELECT SUM(COALESCE(a.pajak, a.ongkir)) AS pengeluaran
                     FROM tbl_harian a
                     JOIN tbl_pembayaran b ON a.pembayaran_id = b.id
                     WHERE a.jenis_pembayaran = 'Keluar'
@@ -40,12 +40,15 @@ class DashboardController extends Controller
                     AND b.id IN (1, 2);
         ";
 
-        $q3 = "SELECT SUM(a.ongkir + a.pajak) AS total_tagihan
+        $q3 = "SELECT SUM(COALESCE(a.pajak, a.ongkir)) AS total_tagihan
                 FROM tbl_harian a
                 JOIN tbl_pembayaran b ON a.pembayaran_id = b.id
-                AND a.tanggal BETWEEN '" . $formattedFilter . "-01' AND '" . $formattedFilter . "-31'
+                WHERE a.tanggal BETWEEN '" . $formattedFilter . "-01' AND '" . $formattedFilter . "-31'
                 AND b.id = 3;
         ";
+
+
+
 
         $pengeluaran = DB::select($q2);
         $pemasukan = DB::select($q1);

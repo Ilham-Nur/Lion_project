@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="{{ asset('css/select2-bootstrap-5-theme.min.css') }}">
   <link rel="stylesheet" href="{{ asset('css/fixedColumns.dataTables.min.css') }}">
   <script src="{{ asset('dashboard/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/css/selectize.min.css">
 </head>
 
 <body>
@@ -30,6 +31,8 @@
   <script type="text/javascript" src="{{ asset('js/datatables.js') }}"></script>
   <script type="text/javascript" src="{{ asset('js/dataTables.fixedColumns.min.js') }}"></script>
   <script src="{{ asset('dashboard/js/sidebarmenu.js') }}"></script>
+  <script src="{{ asset('dashboard/js/app.min.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.13.3/js/standalone/selectize.min.js"></script>
 
   @yield('script')
 
