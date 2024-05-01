@@ -99,90 +99,93 @@
 @section('script')
 <script>
 
-    function getCurrentMonth() {
-            const months = [
-                'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-            ];
+        function getCurrentMonth() {
+                const months = [
+                    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+                ];
 
-            const currentDate = new Date();
-            const currentMonth = months[currentDate.getMonth()];
-            const currentYear = currentDate.getFullYear();
+                const currentDate = new Date();
+                const currentMonth = months[currentDate.getMonth()];
+                const currentYear = currentDate.getFullYear();
 
-            return `${currentMonth} ${currentYear}`;
-        }
-
-        let selectedMonth = '';
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const calendarTitle = document.getElementById('calendarTitle');
-            calendarTitle.textContent = getCurrentMonth();
-        });
-
-
-        const monthFilterInput = document.getElementById('monthEvent');
-
-        const flatpickrInstance = flatpickr(monthFilterInput, {
-            plugins: [
-                new monthSelectPlugin({
-                    shorthand: true,
-                    dateFormat: "M Y",
-                    altFormat: "M Y",
-                    theme: "light"
-                })
-            ],
-            onChange: function(selectedDates, dateStr, instance) {
-                const selectedDate = selectedDates[0];
-                selectedMonth = instance.formatDate(selectedDate, "M Y");
-                const calendarTitle = document.getElementById('calendarTitle');
-                calendarTitle.textContent = selectedMonth;
-                getDataDashboard();
+                return `${currentMonth} ${currentYear}`;
             }
-        });
+
+            let selectedMonth = '';
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const calendarTitle = document.getElementById('calendarTitle');
+                calendarTitle.textContent = getCurrentMonth();
+            });
 
 
-        const getDataDashboard = () => {
+            const monthFilterInput = document.getElementById('monthEvent');
+
+            const flatpickrInstance = flatpickr(monthFilterInput, {
+                plugins: [
+                    new monthSelectPlugin({
+                        shorthand: true,
+                        dateFormat: "M Y",
+                        altFormat: "M Y",
+                        theme: "light"
+                    })
+                ],
+                onChange: function(selectedDates, dateStr, instance) {
+                    const selectedDate = selectedDates[0];
+                    selectedMonth = instance.formatDate(selectedDate, "M Y");
+                    const calendarTitle = document.getElementById('calendarTitle');
+                    calendarTitle.textContent = selectedMonth;
+                    getDataDashboard();
+                }
+            });
+
+
+            const getDataDashboard = () => {
+                $.ajax({
+                        type: "GET",
+                        url: "{{ route('getDataCard') }}",
+                        data: {
+                            filter: selectedMonth
+                        },
+                        success: function(response) {
+                            // Update total uang masuk
+                            $('#pemasukandata').empty();
+                            $('#pemasukandata').append("Rp. " + (response.pemasukan ? parseInt(response.pemasukan).toLocaleString() : "-"));
+
+                            // Update total uang keluar
+                            $('#pengeluaranData').empty();
+                            $('#pengeluaranData').append("Rp. " + (response.pengeluaran ? parseInt(response.pengeluaran).toLocaleString() : "-"));
+
+                            // Update total tagihan
+                            $('#totalTagihanData').empty();
+                            $('#totalTagihanData').append("Rp. " + (response.total_tagihan ? parseInt(response.total_tagihan).toLocaleString() : "-"));
+                        }
+                    });
+
             $.ajax({
                 type: "GET",
-                url: "{{ route('getDataCard') }}",
+                url: "{{ route('getchartdata') }}",
                 data: {
                     filter: selectedMonth
                 },
                 success: function(response) {
-                // Update total uang masuk
-                $('#pemasukandata').text("Rp. " + (response.pemasukan ? parseInt(response.pemasukan).toLocaleString() : "-"));
+                    var formattedData = response.map(function(item) {
+                        return {
+                            x: new Date(item.tanggal).getTime(),
+                            y: parseFloat(item.saldo_harian)
+                        };
+                    });
 
-                // Update total uang keluar
-                $('#pengeluaranData').text("Rp. " + (response.pengeluaran ? parseInt(response.pengeluaran).toLocaleString() : "-"));
+                    chart.updateSeries([{
+                        name: 'chartData',
+                        data: formattedData
+                    }]);
+                }
+            });
+        }
 
-                // Update total tagihan
-                $('#totalTagihanData').text("Rp. " + (response.total_tagihan ? parseInt(response.total_tagihan).toLocaleString() : "-"));
-            }
-        });
-
-        $.ajax({
-            type: "GET",
-            url: "{{ route('getchartdata') }}",
-            data: {
-                filter: selectedMonth
-            },
-            success: function(response) {
-                var formattedData = response.map(function(item) {
-                    return {
-                        x: new Date(item.tanggal).getTime(),
-                        y: parseFloat(item.saldo_harian)
-                    };
-                });
-
-                chart.updateSeries([{
-                    name: 'chartData',
-                    data: formattedData
-                }]);
-            }
-        });
-    }
-
-    getDataDashboard();
+        getDataDashboard();
 
 
 
