@@ -223,7 +223,7 @@
                     lengthChange: false,
                     "bSort": true,
                     "aaSorting": [],
-                    pageLength: 7,
+                    pageLength: 5,
                     "lengthChange": false,
                     responsive: true,
                     language: { search: "" }
@@ -355,6 +355,14 @@
   <script>
     $(document).on('click', '#btnImportFileExcel', function (e) {
         e.preventDefault();
+        const fileEx = $("#importFileExcel").val();
+        if (fileEx == '') {
+            Swal.fire({
+                title: "File Upload Required!",
+                icon: "error"
+            });
+            return;
+        }
         Swal.fire({
             title: "Do you want to save the changes?",
             showDenyButton: true,

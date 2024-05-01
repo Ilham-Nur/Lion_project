@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ExportTagihan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class TagihanController extends Controller
 {
@@ -64,5 +65,34 @@ class TagihanController extends Controller
         $output .= '</tbody></table>';
          return $output;
 
+    }
+
+    public function exportTagihan(Request $req)
+    {
+        $sessionLogin = session('loggedInUser');
+        $sessionLogin['username'] ?? exit(header("Location: " . route('login')));
+        $username = $sessionLogin['username'];
+
+        try {
+
+            DB::beginTransaction();
+            
+            $tanggal = $req->tanggal;
+            $pelanggan = $req->selectPelanggan;
+            
+            DB::commit();
+            
+            return Excel::download(new ExportTagihan($tanggal, $pelanggan), 'ExportTagihan.xlsx');
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'MESSAGETYPE' => 'E',
+                'MESSAGE' => 'Something went wrong',
+                'SERVERMSG' => dd($th->getMessage()),
+            ], 400)->header(
+                'Accept',
+                'application/json'
+            );
+        }
     }
 }

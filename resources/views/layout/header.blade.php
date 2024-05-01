@@ -24,6 +24,7 @@ data-sidebar-position="fixed" data-header-position="fixed">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">Menu</span>
         </li>
+        @if(DB::table('tbl_user')->where('username', session('loggedInUser')['username'])->select('role_id')->value('role_id') == 1)
         <li class="sidebar-item">
             <a class="sidebar-link" href="{{route('dashboard')}}" aria-expanded="false">
               <span>
@@ -32,6 +33,7 @@ data-sidebar-position="fixed" data-header-position="fixed">
               <span class="hide-menu">Dashboard</span>
             </a>
           </li>
+          @endif
         <li class="sidebar-item">
           <a class="sidebar-link" href="{{route('menukaryawan')}}" aria-expanded="false">
             <span>
@@ -48,6 +50,7 @@ data-sidebar-position="fixed" data-header-position="fixed">
             <span class="hide-menu">Pelanggan Tetap</span>
           </a>
         </li>
+        @if(DB::table('tbl_user')->where('username', session('loggedInUser')['username'])->select('role_id')->value('role_id') == 1)
         <li class="sidebar-item">
           <a class="sidebar-link" href="{{ route('menutagihan') }}" aria-expanded="false">
             <span>
@@ -64,6 +67,7 @@ data-sidebar-position="fixed" data-header-position="fixed">
             <span class="hide-menu">User</span>
           </a>
         </li>
+        @endif
         {{--<li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">UI COMPONENTS</span>
@@ -183,7 +187,7 @@ data-sidebar-position="fixed" data-header-position="fixed">
             <div class="notification bg-primary rounded-circle"></div>
           </a> --}}
 
-          <h4>Selamat Datang Admin</h4>
+          <h4>Selamat Datang {{ session('loggedInUser')['username'] }} ({{ DB::table('tbl_role')->where('id', DB::table('tbl_user')->where('username', session('loggedInUser')['username'])->select('role_id')->value('role_id'))->select('role')->value('role') }})</h4>
         </li>
       </ul>
       <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
@@ -191,6 +195,7 @@ data-sidebar-position="fixed" data-header-position="fixed">
           <li class="nav-item dropdown">
             <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
               aria-expanded="false">
+              <span style="margin-right: 10px">{{ session('loggedInUser')['username'] }}</span>
               <img src="{{ asset('dashboard/images/profile/user-1.jpg') }}" alt="Gambar User" width="35" height="35" class="rounded-circle">
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">

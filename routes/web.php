@@ -27,8 +27,10 @@ Route::get('/pelanggantetap/hapusPelanggan', [PelangganController::class, 'hapus
 
 //Menu User
 Route::get('/user', [UserController::class, 'index'])->name('menuuser');
+Route::get('/listPelanggan', [UserController::class, 'listPelanggan'])->name('listPelanggan');
 
 
 //Menu User
 Route::get('/tagihan', [TagihanController::class, 'index'])->name('menutagihan');
+Route::get('/exportTagihan', [TagihanController::class, 'exportTagihan'])->name('exportTagihan');
 Route::get('/tagihan/getlisttagihan', [TagihanController::class, 'getlistTagihan'])->name('getlistTagihan');

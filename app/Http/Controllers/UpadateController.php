@@ -20,18 +20,17 @@ class UpadateController extends Controller
                     a.id,
                     DATE_FORMAT(a.tanggal, '%d %M %Y') AS tanggal_formatted,
                     a.jenis_pembayaran,
-                    b.nama AS pelanggan,
+                    a.pelanggan,
                     a.keterangan,
                     a.no_resi,
                     a.ongkir,
                     a.pajak,
                     c.name AS pembayaran
                 FROM tbl_harian a
-                JOIN tbl_pelanggan b ON b.id = a.pelanggan_id
                 INNER JOIN tbl_pembayaran c ON c.id = a.pembayaran_id
                 WHERE UPPER(jenis_pembayaran) LIKE UPPER('$txSearch')
                 OR UPPER(no_resi) LIKE UPPER('$txSearch')
-                OR UPPER(b.nama) LIKE UPPER('$txSearch')
+                OR UPPER(a.pelanggan) LIKE UPPER('$txSearch')
                 OR UPPER(c.name) LIKE UPPER('$txSearch')
                 ORDER BY id Desc
         ";

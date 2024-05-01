@@ -12,6 +12,34 @@
     </div>
 </div>
 
+<!-- Modal Tambah-->
+<div class="modal fade" id="modalImportExcel" tabindex="-1" aria-labelledby="modalImportExcelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modalImportExcelLabel">Import Data Harian</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3">
+                <label class="form-label">Tanggal</label>
+                <input class="form-control" style="background-color: #e9eef7" type="text" readonly name="tanggal" id="tanggal">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Pelanggan</label>
+                <select class="form-select" id="selectPelanggan" required>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            <button type="button" id="btnExportFileExcel" class="btn btn-success">Export</button>
+        </div>
+        </div>
+    </div>
+    </div>
+<!--End Modal Tambah-->
+
   <div class="row mt-3">
     <div class="d-flex gap-3 justify-content-between">
         <div class="d-flex gap-3">
@@ -26,7 +54,7 @@
         </div>
         <div class="d-flex gap-3">
             <button type="button" id="btnTambahTagihan" class="btn btn-primary">Export Tagihan</button>
-          </div>
+        </div>
     </div>
 
   </div>
@@ -119,7 +147,44 @@ $('#txSearch').keyup(function(e) {
 
 
 </script>
+<script>
+    $(document).on('click', '#btnTambahTagihan', function (e) {
+        e.preventDefault();
+        $("#modalImportExcel").modal('show');
+        const hariPicker = $("#hariPicker").val();
+        $("#tanggal").val(hariPicker);
+        $.ajax({
+            url: '{{ route('listPelanggan') }}',
+            type: 'GET',
+            data: {tanggal:hariPicker},
+            dataType: 'JSON',
+            success: function(data) {
+                let select = $('#selectPelanggan');
+                select.empty();
+                select.append('<option value="" selected>Select Pelanggan</option>');
+                $.each(data, function(key, value) {
+                    select.append('<option value="' + value.pengirim + '">' + value.pengirim + '</option>');
+                });
+            }
+        })
 
+        $(document).on('click', '#btnExportFileExcel', function (e) {
+            e.preventDefault();
+            var tanggal = $("#tanggal").val();
+            var selectPelanggan = $('#selectPelanggan').val();
+            if (selectPelanggan == "") {
+                Swal.fire({
+                    title: "Select Pelanggan Required!",
+                    icon: "error"
+                });
+                return;
+            }
+            var url = "{{ route('exportTagihan') }}" + "?tanggal=" + tanggal + "&selectPelanggan=" + selectPelanggan;
+            window.location = url;
+            $("#modalImportExcel").modal('hide');
+        });
+    })
+</script>
 
 @endsection
 

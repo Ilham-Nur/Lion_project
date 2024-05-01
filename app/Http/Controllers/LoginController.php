@@ -32,7 +32,11 @@ class LoginController extends Controller
             'username' => $username,
         ]);
 
-        return response()->json(['redirect_url' => '/dashboardnew']);
+        if (DB::table('tbl_role')->where('id', DB::table('tbl_user')->where('username', session('loggedInUser')['username'])->select('role_id')->value('role_id'))->select('role')->value('role') == "Owner") {
+            return response()->json(['redirect_url' => '/dashboardnew']);
+        } else {
+            return response()->json(['redirect_url' => '/karyawan/dashboard']);
+        }
     }
 
     public function logout()
