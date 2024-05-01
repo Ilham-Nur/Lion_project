@@ -1,20 +1,16 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-
 class UpadateController extends Controller
 {
-    //Halaman Dashboard
     public function karyawan()
     {
         return view('update/updateindex');
-
     }
-
 
     public function getlistDataHarian(Request $request)
     {
@@ -122,8 +118,52 @@ class UpadateController extends Controller
         }
 
         $output .= '</tbody></table>';
-         return $output;
-
+        return $output;
     }
 
+    public function insertDataHarian(Request $req)
+    {
+        $sessionLogin = session('loggedInUser');
+        $sessionLogin['username'] ?? exit(header("Location: " . route('login')));
+        $username = $sessionLogin['username'];
+
+        try {
+
+            DB::beginTransaction();
+            foreach ($req->dataImport as $r) {
+                DB::table('tbl_harian')->insert([
+                    "tanggal" => new DateTime($r['tanggal']),
+                    "jenis_pembayaran" => "Masuk",
+                    "pelanggan" => $r['pelanggan'],
+                    "keterangan" => "Piutang",
+                    "no_resi" => $r['no_resi'],
+                    "ongkir" => $r['ongkir'],
+                    "pajak" => $r['pajak'],
+                    "pembayaran_id" => 3,
+                ]);
+
+                DB::table('tbl_tagihan')->insert([
+                    "no_resi" => $r['no_resi'],
+                    "tanggal" => new DateTime($r['tanggal']),
+                    "pengirim" => $r['pelanggan'],
+                    "ongkir" => $r['ongkir'],
+                    "pajak" => $r['pajak'],
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json('SUCCESS');
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'MESSAGETYPE' => 'E',
+                'MESSAGE' => 'Something went wrong',
+                'SERVERMSG' => dd($th->getMessage()),
+            ], 400)->header(
+                'Accept',
+                'application/json'
+            );
+        }
+    }
 }

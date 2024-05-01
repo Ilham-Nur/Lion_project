@@ -68,6 +68,27 @@
 </div>
 <!--End Modal Tambah-->
 
+<!-- Modal Tambah-->
+<div class="modal fade" id="modalImportExcel" tabindex="-1" aria-labelledby="modalImportExcelLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalImportExcelLabel">Import Data Harian</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <input type="file" class="form-control" id="importFileExcel" name="importFileExcel" accept=".xlsx, .xls">
+            <div id="output" style="max-height: 300px; overflow-y: scroll; overflow-x:hidden; margin-top: 10px;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="button" id="btnImportFileExcel" class="btn btn-success" data-bs-dismiss="modal">Import</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--End Modal Tambah-->
+
 <div class="col-sm-12">
     <div>
         <h3 class=" mt-3 fw-bold">Update Harian</h3>
@@ -80,7 +101,7 @@
       {{-- Search --}}
       <input id="txSearch" type="text" style="width: 250px; min-width: 250px;"class="form-control rounded-3" placeholder="Search">
       <div class="d-flex gap-3">
-        <button type="button" id="" class="btn btn-primary">Import Data Harian</button>
+        <button type="button" id="" class="btn btn-primary btnModalImportExcel">Import Data Harian</button>
         <button type="button" id="btnTambahDataManual" class="btn btn-primary">Tambah Data Harian</button>
       </div>
   </div>
@@ -172,6 +193,9 @@
 @endsection
 
 @section('script')
+<script>
+    let dataImport = [];
+</script>
 
   <script>
       const loadSpin = `<div class="d-flex justify-content-center align-items-center mt-5">
@@ -295,7 +319,78 @@
             });
         });
   </script>
-
+  <script>
+    $(document).on('click', '.btnModalImportExcel', function (e) {
+        e.preventDefault();
+        $("#modalImportExcel").modal('show');
+    });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.4/xlsx.full.min.js"></script>
+  <script>
+    $(document).on('change',"#importFileExcel", function (e) {
+        e.preventDefault();
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var data = new Uint8Array(e.target.result);
+            var workbook = XLSX.read(data, {type: 'array'});
+            var sheetName = workbook.SheetNames[0];
+            var sheet = workbook.Sheets[sheetName];
+            var columnData = XLSX.utils.sheet_to_json(sheet, { header: 1 })
+                .slice(1)
+                .map(row => ({
+                    no_resi: row[0],
+                    tanggal: row[1],
+                    pelanggan: row[5],
+                    ongkir: row[41],
+                    pajak: (parseInt(row[44] || 0) + parseInt(row[45] || 0) + parseInt(row[46] || 0))
+                }));
+            var outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = "<h5 class='mt-3'>Data Kolom yang Diambil:</h5><pre>" + JSON.stringify(columnData, null, 2) + "</pre>";
+            dataImport = columnData;
+        };
+        reader.readAsArrayBuffer(file);
+    })
+  </script>
+  <script>
+    $(document).on('click', '#btnImportFileExcel', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('insertDataHarian') }}",
+                    data: {dataImport},
+                    dataType: "JSON",
+                    success: function (RES) {
+                        console.log(RES);
+                        Swal.fire("Saved!", "", "success");
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+    })
+  </script>
+  <script>
+    $('#modalImportExcel').on('hidden.bs.modal', function () {
+        $("#importFileExcel").val("");
+        $("#output").empty();
+        document.getElementById('output').innerHTML = '';
+        document.getElementById('output').replaceChildren();
+        var container = document.getElementById('output');
+        while (container.childNodes.length > 0) {
+            container.removeChild(container.childNodes[0]);
+        }
+    });
+  </script>
   @endsection
 
 

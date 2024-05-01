@@ -1,19 +1,17 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
-
 class LoginController extends Controller
 {
-    //Halaman Login
     public function index()
     {
-        return view('login/loginindex');
-
+        if (!session()->has('loggedInUser')) {
+            return view('login/loginindex');
+        } else {
+            return redirect('/dashboardnew');
+        }
     }
 
     public function login(Request $request)
@@ -21,33 +19,28 @@ class LoginController extends Controller
         $username = $request->input('username');
         $password = $request->input('password');
 
-
         $user = DB::table('tbl_user')
         ->where('username', $username)
         ->where('password', $password)
         ->first();
 
-        // Check if $user is empty
         if (!$user) {
             return response()->json(['message' => 'Data not found'], 401);
         }
 
+        $request->session()->put('loggedInUser', [
+            'username' => $username,
+        ]);
+
         return response()->json(['redirect_url' => '/dashboardnew']);
-
-        // if ($user->role_id === 1){
-        //     return response()->json(['role_id' => $user->role_id, 'redirect_url' => 'admin/dashboard']);
-        // } else if ($user->role_id === 2) {
-        //     return response()->json(['role_id' => $user->role_id, 'redirect_url' => '/dashboard']);
-        // } else {
-
-        // }
-
-
     }
 
     public function logout()
     {
-        return redirect('/');
+        if (session()->has('loggedInUser')) {
+            session()->pull('loggedInUser');
+            Auth::logout();
+            return redirect('/');
+        }
     }
-
 }
