@@ -379,6 +379,7 @@
                     success: function (RES) {
                         console.log(RES);
                         Swal.fire("Saved!", "", "success");
+                        getListDataHarian();
                     }
                 });
             } else if (result.isDenied) {

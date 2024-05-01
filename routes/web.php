@@ -10,7 +10,11 @@ use App\Http\Controllers\TagihanController;
 Route::get('/', [LoginController::class, 'index'])->name('login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/ceklogin', [LoginController::class, 'login'])->name('ceklogin');
+
+// Menu Dashboard
 Route::get('/dashboardnew', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard/carddata', [DashboardController::class, 'getDataCard'])->name('getDataCard');
+Route::get('/dashboard/chardata', [DashboardController::class, 'getchartdata'])->name('getchartdata');
 
 //Menu Update
 Route::get('/karyawan/dashboard', [UpadateController::class, 'karyawan'])->name('menukaryawan');

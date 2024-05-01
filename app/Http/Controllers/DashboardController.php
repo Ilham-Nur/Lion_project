@@ -9,7 +9,95 @@ class DashboardController extends Controller
         $sessionLogin = session('loggedInUser');
         $sessionLogin['username'] ?? exit(header("Location: " . route('login')));
         $username = $sessionLogin['username'];
-        
+
         return view('dashboard/dashboardindex');
     }
+
+
+    public function getDataCard (Request $request)
+    {
+        $filter = $request->filter;
+        if (!$filter) {
+            $formattedFilter = date('Y-m');
+        } else {
+            $formattedFilter = date_create_from_format("M Y", $filter)->format("Y-m");
+        }
+
+     $q1 = "SELECT SUM(a.ongkir + a.pajak) AS pemasukan
+                FROM tbl_harian a
+                JOIN tbl_pembayaran b ON a.pembayaran_id = b.id
+                WHERE a.jenis_pembayaran = 'Masuk'
+                AND a.tanggal BETWEEN '" . $formattedFilter . "-01' AND '" . $formattedFilter . "-31'
+                AND b.id <> 3;
+        ";
+
+
+        $q2 = "SELECT SUM(a.ongkir + a.pajak) AS pengeluaran
+                    FROM tbl_harian a
+                    JOIN tbl_pembayaran b ON a.pembayaran_id = b.id
+                    WHERE a.jenis_pembayaran = 'Keluar'
+                    AND a.tanggal BETWEEN '" . $formattedFilter . "-01' AND '" . $formattedFilter . "-31'
+                    AND b.id IN (1, 2);
+        ";
+
+        $q3 = "SELECT SUM(a.ongkir + a.pajak) AS total_tagihan
+                FROM tbl_harian a
+                JOIN tbl_pembayaran b ON a.pembayaran_id = b.id
+                AND a.tanggal BETWEEN '" . $formattedFilter . "-01' AND '" . $formattedFilter . "-31'
+                AND b.id = 3;
+        ";
+
+        $pengeluaran = DB::select($q2);
+        $pemasukan = DB::select($q1);
+        $total_tagihan = DB::select($q3);
+
+
+        $result = [
+            'pemasukan' => $pemasukan[0]->pemasukan,
+            'pengeluaran' => $pengeluaran[0]->pengeluaran,
+            'total_tagihan' => $total_tagihan[0]->total_tagihan
+        ];
+
+        return response()->json($result);
+    }
+
+    public function getchartdata(Request $request)
+    {
+        $filter = $request->filter;
+
+        if (!$filter) {
+            $formattedFilter = date('Y-m');
+        } else {
+            $formattedFilter = date_create_from_format("M Y", $filter)->format("Y-m");
+        }
+
+        $q1 = "SELECT a.tanggal, COALESCE(pemasukan, 0) - COALESCE(pengeluaran, 0) AS saldo_harian
+            FROM (
+                SELECT DISTINCT tanggal
+                FROM tbl_harian
+                WHERE tanggal BETWEEN '" . $formattedFilter . "-01' AND '" . $formattedFilter . "-31'
+            ) AS a
+            LEFT JOIN (
+                SELECT tanggal, SUM(ongkir + pajak) AS pemasukan
+                FROM tbl_harian a
+                JOIN tbl_pembayaran b ON a.pembayaran_id = b.id
+                WHERE jenis_pembayaran = 'Masuk'
+                AND b.id IN (1, 2)
+                GROUP BY tanggal
+            ) AS p ON a.tanggal = p.tanggal
+            LEFT JOIN (
+                SELECT tanggal, SUM(ongkir + pajak) AS pengeluaran
+                FROM tbl_harian a
+                JOIN tbl_pembayaran b ON a.pembayaran_id = b.id
+                WHERE jenis_pembayaran = 'Keluar'
+                AND b.id IN (1, 2)
+                GROUP BY tanggal
+            ) AS q ON a.tanggal = q.tanggal
+            ORDER BY a.tanggal;";
+
+        $data = DB::select($q1);
+
+        return response()->json($data);
+    }
+
 }

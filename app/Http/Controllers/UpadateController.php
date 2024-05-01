@@ -33,6 +33,7 @@ class UpadateController extends Controller
                 OR UPPER(a.pelanggan) LIKE UPPER('$txSearch')
                 OR UPPER(c.name) LIKE UPPER('$txSearch')
                 ORDER BY id Desc
+                LIMIT 100
         ";
 
         $data = DB::select($q);
