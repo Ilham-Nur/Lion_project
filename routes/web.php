@@ -45,5 +45,6 @@ Route::get('/user/generateBadge', [UserController::class, 'generateBadge'])->nam
 Route::post('/user/tambahUser', [UserController::class, 'tambahUser'])->name('tambahUser');
 Route::get('/user/hapusUser', [UserController::class, 'hapusUser'])->name('hapusUser');
 
+Route::get('/listPelanggan', [UserController::class, 'listPelanggan'])->name('listPelanggan');
 
 
