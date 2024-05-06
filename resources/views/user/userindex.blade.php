@@ -19,12 +19,24 @@
                 <input type="text" class="form-control" id="namaUser" value="">
             </div>
             <div class="mt-3">
-                <label for="noTelpon" class="form-label fw-bold">No. Telpon</label>
-                <input type="text" class="form-control numericInput" id="noTelpon" value="">
+                <label for="badgeUser" class="form-label fw-bold">Badge</label>
+                <input type="text" class="form-control numericInput" id="badgeUser" value="" disabled>
             </div>
             <div class="mt-3">
-                <label for="alamat" class="form-label fw-bold">Alamat</label>
-                <textarea class="form-control" id="alamatUser" rows="3"></textarea>
+                <label for="passwordUser" class="form-label fw-bold">Password</label>
+                <input type="password" class="form-control" id="passwordUser"></input>
+            </div>
+            <div class="mt-3">
+                <label for="cekPassword" class="form-label fw-bold">Ulangi Password</label>
+                <input type="password" class="form-control" id="cekPassword"></input>
+            </div>
+            <div class="mt-3">
+                <label for="alamat" class="form-label fw-bold">Role</label>
+                <select id="roleUser" class="form-control">
+                    <option value="" selected disabled>Pilih Role</option>
+                    <option value="1">Owner</option>
+                    <option value="2">Admin</option>
+                </select>
             </div>
         </div>
         <div class="modal-footer">
@@ -166,17 +178,42 @@ const loadSpin = `<div class="d-flex justify-content-center align-items-center m
 
     $(document).on('click', '#btnTambahUser', function(e){
         e.preventDefault()
+        let password = $('#passwordUser').val();
+       
+        $.ajax({
+            type: "GET",
+            url: "{{route('generateBadge')}}",
+            dataType: "json",
+            success: function (response) {
+                $('#badgeUser').val(response);
+            }
+        });
+
+        
+        $('#cekPassword').change(function(){
+            var password = $('#passwordUser').val();
+            var confirmPassword = $(this).val();
+            
+            if(password !== confirmPassword) {
+                Swal.fire({
+                    title: "Password tidak sama",
+                    icon: "error"
+                });
+            }
+
+        });
 
         $('#modalTambahUser').modal('show');
        });
 
        $(document).ready(function () {
-            $("#submitpelanggan").click(function (e) {
+            $("#submitUser").click(function (e) {
                 e.preventDefault();
 
-                let namaPelanggan = $('#namaPelanggan').val();
-                let noPelanggan = $('#noTelpon').val();
-                let alamatPelanggan = $('#alamatPelanggan').val();
+                let namaUser = $('#namaUser').val();
+                let noBadge = $('#badgeUser').val();
+                let passwordUser = $('#cekPassword').val();
+                let roleUser = $('#roleUser').val();
                 const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
                 Swal.fire({
@@ -192,24 +229,25 @@ const loadSpin = `<div class="d-flex justify-content-center align-items-center m
                     if (result.isConfirmed) {
                             $.ajax({
                             type: "POST",
-                            url: "{{route('tambahPelanggan')}}",
+                            url: "{{route('tambahUser')}}",
                             data: {
-                                namaPelanggan : namaPelanggan,
-                                noPelanggan : noPelanggan,
-                                alamatPelanggan : alamatPelanggan,
+                                namaUser : namaUser,
+                                noBadge : noBadge,
+                                passwordUser : passwordUser,
+                                roleUser : roleUser,
                                 _token : csrfToken
                             },
                             success: function (response) {
                                 if (response.status === 'success') {
                                     Swal.fire({
-                                        title: "Berhasil Menambahkan Pelanggan",
+                                        title: "User berhasil ditambahkan",
                                         icon: "success"
                                     });
-                                    getListPelanggan();
-                                    $('#modalTambahPelanggan').modal('hide');
+                                    getListUser();
+                                    $('#modalTambahUser').modal('hide');
                                 } else {
                                     Swal.fire({
-                                        title: "Gagal Menambahkan Pelanggan",
+                                        title: "Gagal Menambahkan User",
                                         icon: "error"
                                     });
                                 }

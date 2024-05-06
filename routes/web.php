@@ -41,8 +41,9 @@ Route::get('/tagihan/hapustagihan', [TagihanController::class, 'hapusTagihan'])-
 //Menu User
 Route::get('/user', [UserController::class, 'index'])->name('menuuser');
 Route::get('/user/getlistUser', [UserController::class, 'getlistUser'])->name('getlistUser');
+Route::get('/user/generateBadge', [UserController::class, 'generateBadge'])->name('generateBadge');
+Route::post('/user/tambahUser', [UserController::class, 'tambahUser'])->name('tambahUser');
 Route::get('/user/hapusUser', [UserController::class, 'hapusUser'])->name('hapusUser');
 
-Route::get('/listPelanggan', [UserController::class, 'listPelanggan'])->name('listPelanggan');
 
 
