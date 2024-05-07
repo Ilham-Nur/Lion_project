@@ -15,12 +15,12 @@
         </div>
         <div class="modal-body">
             <div class="mt-3">
-                <label for="namaUser" class="form-label fw-bold">Nama User</label>
-                <input type="text" class="form-control" id="namaUser" value="">
-            </div>
-            <div class="mt-3">
                 <label for="badgeUser" class="form-label fw-bold">Badge</label>
                 <input type="text" class="form-control numericInput" id="badgeUser" value="" disabled>
+            </div>
+            <div class="mt-3">
+                <label for="namaUser" class="form-label fw-bold">Nama User</label>
+                <input type="text" class="form-control" id="namaUser" value="">
             </div>
             <div class="mt-3">
                 <label for="passwordUser" class="form-label fw-bold">Password</label>
@@ -179,7 +179,7 @@ const loadSpin = `<div class="d-flex justify-content-center align-items-center m
     $(document).on('click', '#btnTambahUser', function(e){
         e.preventDefault()
         let password = $('#passwordUser').val();
-       
+
         $.ajax({
             type: "GET",
             url: "{{route('generateBadge')}}",
@@ -189,11 +189,11 @@ const loadSpin = `<div class="d-flex justify-content-center align-items-center m
             }
         });
 
-        
+
         $('#cekPassword').change(function(){
             var password = $('#passwordUser').val();
             var confirmPassword = $(this).val();
-            
+
             if(password !== confirmPassword) {
                 Swal.fire({
                     title: "Password tidak sama",
