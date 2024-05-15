@@ -37,6 +37,7 @@ Route::get('/tagihan', [TagihanController::class, 'index'])->name('menutagihan')
 Route::get('/exportTagihan', [TagihanController::class, 'exportTagihan'])->name('exportTagihan');
 Route::get('/tagihan/getlisttagihan', [TagihanController::class, 'getlistTagihan'])->name('getlistTagihan');
 Route::get('/tagihan/hapustagihan', [TagihanController::class, 'hapusTagihan'])->name('hapusTagihan');
+Route::get('/listPelanggan', [UserController::class, 'listPelanggan'])->name('listPelanggan');
 
 //Menu User
 Route::get('/user', [UserController::class, 'index'])->name('menuuser');
@@ -45,6 +46,5 @@ Route::get('/user/generateBadge', [UserController::class, 'generateBadge'])->nam
 Route::post('/user/tambahUser', [UserController::class, 'tambahUser'])->name('tambahUser');
 Route::get('/user/hapusUser', [UserController::class, 'hapusUser'])->name('hapusUser');
 
-Route::get('/listPelanggan', [UserController::class, 'listPelanggan'])->name('listPelanggan');
 
 

@@ -150,7 +150,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="modalImportExcelLabel">Import Data Harian</h1>
+          <h1 class="modal-title fs-5" id="modalImportExcelLabel">Import Data Genesis Lion Parcel</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -178,7 +178,7 @@
       {{-- Search --}}
       <input id="txSearch" type="text" style="width: 250px; min-width: 250px;"class="form-control rounded-3" placeholder="Search">
       <div class="d-flex gap-3">
-        <button type="button" id="" class="btn btn-primary btnModalImportExcel">Import Data Harian</button>
+        <button type="button" id="" class="btn btn-primary btnModalImportExcel">Import Data Genesis Lion Parcel</button>
         <button type="button" id="btnTambahDataManual" class="btn btn-primary">Tambah Data Harian</button>
       </div>
   </div>

@@ -22,10 +22,11 @@ class TagihanController extends Controller
         $txSearch = '%' . strtoupper(trim($request->txSearch)) . '%';
         $filter = $request->filter;
 
-        $q = "SELECT * FROM tbl_tagihan
-        WHERE tanggal = '$filter'
-        AND (UPPER(no_resi) LIKE UPPER('$txSearch') OR UPPER(pengirim) LIKE UPPER('$txSearch'))
-        ORDER BY id DESC;
+        $q = "SELECT id, no_resi, tanggal, pengirim, ongkir, pajak, (ongkir + pajak) AS total
+                FROM tbl_tagihan
+                WHERE tanggal = '$filter'
+                AND (UPPER(no_resi) LIKE UPPER('$txSearch') OR UPPER(pengirim) LIKE UPPER('$txSearch'))
+                ORDER BY id DESC;
         ";
 
 
@@ -41,6 +42,7 @@ class TagihanController extends Controller
                 <th scope="col">Pelanggan</th>
                 <th scope="col">Ongkir</th>
                 <th scope="col">Pajak</th>
+                <th scope="col">Total</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -54,7 +56,7 @@ class TagihanController extends Controller
                     <td class="">' . ($item->pengirim ?? '-') .'</td>
                     <td class="">' . ($item->ongkir ? 'Rp. ' . number_format($item->ongkir) : '-') .'</td>
                     <td class="">' . ($item->pajak ? 'Rp. ' . number_format($item->pajak) : '-') .'</td>
-
+                    <td class="">' . ($item->total ? 'Rp. ' . number_format($item->total) : '-') .'</td>
                     <td>
                        <a  class="btn btnDeleteTagihan" data-id="' .$item->id .'"><img src="' .asset('icons/delete.svg') .'"></a>
                    </td>

@@ -257,6 +257,13 @@ const loadSpin = `<div class="d-flex justify-content-center align-items-center m
                 })
             });
         });
+
+    $('#modalTambahUser').on('hidden.bs.modal', function () {
+        $("#namaUser").val("");
+        $("#cekPassword").val("");
+        $("#passwordUser").val("");
+        $("#roleUser").val("");
+    });
 </script>
 
 
