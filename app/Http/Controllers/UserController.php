@@ -57,7 +57,7 @@ class UserController extends Controller
                 WHERE UPPER(username) LIKE UPPER('$txSearch')
                 OR UPPER(badge) LIKE UPPER('$txSearch')
                 OR UPPER(role) LIKE UPPER('$txSearch')
-                ORDER BY id Desc
+                ORDER BY a.badge Asc
                 ";
 
             $data = DB::select($q);
@@ -65,8 +65,8 @@ class UserController extends Controller
             $output = '<table id="tableUser" class="table table-responsive table-hover">
                     <thead>
                     <tr class="table-primary" >
-                        <th scope="col">Username</th>
                         <th scope="col">Badge</th>
+                        <th scope="col">Username</th>
                         <th scope="col">Password</th>
                         <th scope="col">Role</th>
                         <th scope="col">Action</th>
@@ -78,8 +78,8 @@ class UserController extends Controller
                 $output .=
                     '
                     <tr>
-                        <td class="">' . ($item->username ?? '-') .'</td>
                         <td class="">' . ($item->badge ?? '-') .'</td>
+                        <td class="">' . ($item->username ?? '-') .'</td>
                         <td class="">' . ($item->password ?? '-') .'</td>
                         <td class="">' . ($item->role ?? '-') .'</td>
                         <td>
@@ -116,11 +116,11 @@ class UserController extends Controller
         FROM tbl_user
         ORDER BY id DESC
         LIMIT 1;";
-    
+
         $data = DB::select($q);
-      
+
         if (!empty($data)) {
-            $badge = $data[0]->badge; 
+            $badge = $data[0]->badge;
             $badge = str_pad((int)$badge + 1, strlen($badge), '0', STR_PAD_LEFT);
         } else {
             $badge = "Unknow!!";
