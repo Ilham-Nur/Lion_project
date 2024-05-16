@@ -5,6 +5,7 @@ foreach ($data as $item) {
     $totalOngkir += $item->ongkir;
     $totalPajak += $item->pajak;
 }
+$totalKeseluruhan = $totalOngkir + $totalPajak;
 @endphp
 <table>
     <thead>
@@ -44,6 +45,10 @@ foreach ($data as $item) {
             <th colspan="3" style="text-align:right;font-size:11px;border:1px solid black; padding: 10px">Total:</th>
             <th style="text-align:left;font-size:11px;border:1px solid black; padding: 10px">{{ $totalOngkir }}</th>
             <th style="text-align:left;font-size:11px;border:1px solid black; padding: 10px">{{ $totalPajak }}</th>
+        </tr>
+        <tr>
+            <th colspan="3" style="text-align:right;font-size:11px;border:1px solid black; padding: 10px">Total Keseluruhan:</th>
+            <th colspan="2" style="text-align:left;font-size:11px;border:1px solid black; padding: 10px">{{ $totalKeseluruhan }}</th>
         </tr>
     </tfoot>
 </table>
