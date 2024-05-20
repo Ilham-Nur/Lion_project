@@ -12,24 +12,58 @@
     </div>
 </div>
 
-<!-- Modal Tambah-->
+<!-- Modal Preview-->
 <div class="modal fade" id="modalImportExcel" tabindex="-1" aria-labelledby="modalImportExcelLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
         <div class="modal-header">
-            <h1 class="modal-title fs-5" id="modalImportExcelLabel">Import Data Harian</h1>
+            <h1 class="modal-title fs-5" id="modalImportExcelLabel">Export Preview</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-            <div class="mb-3">
+        <div class="modal-body ">
+            <div class="mb-3 col-6">
                 <label class="form-label">Tanggal</label>
                 <input class="form-control" style="background-color: #e9eef7" type="text" readonly name="tanggal" id="tanggal">
             </div>
-            <div class="mb-3">
+            <div class="mb-3 col-6">
                 <label class="form-label">Pelanggan</label>
                 <select class="form-select" id="selectPelanggan" required>
                 </select>
             </div>
+            <div id="test">
+                {{-- <table id="tablePreviewTagihan" class="table table-responsive table-hover">
+                    <thead>
+                        <tr class="table-primary" >
+                            <th scope="col">No Resi</th>
+                            <th scope="col">Tanggal</th>
+                            <th scope="col">Tagihan</th>
+                            <th scope="col">Ongkir</th>
+                            <th scope="col">Pajak</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="align-middle">
+                            <td>11LP1700879991404</td>
+                            <td>2023-11-24</td>
+                            <td>PIJE</td>
+                            <td>82000</td>
+                            <td>38000</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3">Total</td>
+                            <td id="total-ongkir">50000</td>
+                            <td id="total-pajak">30000</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">Total Keseluruhan</td>
+                            <td id="total-keseluruan">80000</td>
+                        </tr>
+                    </tfoot>
+                </table> --}}
+            </div>
+
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -38,7 +72,7 @@
         </div>
     </div>
     </div>
-<!--End Modal Tambah-->
+<!--End Modal Preview-->
 
   <div class="row mt-3">
     <div class="d-flex gap-3 justify-content-between">
@@ -53,7 +87,7 @@
             </button>
         </div>
         <div class="d-flex gap-3">
-            <button type="button" id="btnTambahTagihan" class="btn btn-primary">Export Tagihan</button>
+            <button type="button" id="btnTambahTagihan" class="btn btn-primary">Preview Tagihan</button>
         </div>
     </div>
 
@@ -205,7 +239,46 @@ $(document).on('click', '.btnDeleteTagihan', function(e){
                     select.append('<option value="' + value.pengirim + '">' + value.pengirim + '</option>');
                 });
             }
+
+
         })
+
+        const getPreviewTagihan = () => {
+                let tanggalPreview =  $("#tanggal").val();
+                let pelangganPreview =  $("#selectPelanggan").val();
+
+                $.ajax({
+                    url: "{{ route('previewTagihan') }}",
+                    method: "GET",
+                    data: {
+                        filter: tanggalPreview,
+                        pelanggan: pelangganPreview
+                    },
+                    beforeSend: () => {
+                        $('#test').html(loadSpin);
+                    }
+                })
+                .done(res => {
+                    $('#test').html(res);
+                    $('#tablePreviewTagihan').DataTable({
+                        searching: false,
+                        lengthChange: false,
+                        "bSort": true,
+                        "aaSorting": [],
+                        pageLength: 7,
+                        responsive: true,
+                        language: { search: "" }
+                    });
+                });
+            };
+
+            getPreviewTagihan();
+
+            $('#selectPelanggan').on('change', function() {
+                getPreviewTagihan();
+            });
+
+
 
         $(document).on('click', '#btnExportFileExcel', function (e) {
             e.preventDefault();
@@ -223,6 +296,14 @@ $(document).on('click', '.btnDeleteTagihan', function(e){
             $("#modalImportExcel").modal('hide');
         });
     })
+
+    $('#modalImportExcel').on('hidden.bs.modal', function () {
+        $("#selectPelanggan").val("");
+    });
+</script>
+
+<script>
+
 </script>
 
 @endsection

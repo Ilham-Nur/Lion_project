@@ -28,10 +28,6 @@ class TagihanController extends Controller
                 AND (UPPER(no_resi) LIKE UPPER('$txSearch') OR UPPER(pengirim) LIKE UPPER('$txSearch'))
                 ORDER BY id DESC;
         ";
-
-
-
-
         $data = DB::select($q);
 
         $output = '<table id="tableTagihan" class="table table-responsive table-hover">
@@ -85,6 +81,67 @@ class TagihanController extends Controller
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
+
+    public function previewTagihan(Request $request)
+    {
+        $filter = $request->filter;
+        $pelanggan = $request->pelanggan;
+
+        $q = "SELECT no_resi, tanggal, pengirim, ongkir, pajak
+        FROM tbl_tagihan
+        WHERE pengirim = '$pelanggan' AND tanggal = '$filter';";
+        $data = DB::select($q);
+
+        $totalOngkir = 0;
+        $totalPajak = 0;
+
+        $output = '<table id="tablePreviewTagihan" class="table table-responsive table-hover">
+            <thead>
+                <tr class="table-primary" >
+                    <th scope="col">No Resi</th>
+                    <th scope="col">Tanggal</th>
+                    <th scope="col">Tagihan</th>
+                    <th scope="col">Ongkir</th>
+                    <th scope="col">Pajak</th>
+                </tr>
+            </thead>
+            <tbody>';
+
+        foreach ($data as $item) {
+            $ongkir = $item->ongkir ?? 0;
+            $pajak = $item->pajak ?? 0;
+
+            $totalOngkir += $ongkir;
+            $totalPajak += $pajak;
+
+            $output .= '<tr>
+                            <td class="">' . ($item->no_resi ?? '-') . '</td>
+                            <td class="">' . ($item->tanggal ?? '-') . '</td>
+                            <td class="">' . ($item->pengirim ?? '-') . '</td>
+                            <td class="">' . ($ongkir ? 'Rp. ' . number_format($ongkir) : '-') . '</td>
+                            <td class="">' . ($pajak ? 'Rp. ' . number_format($pajak) : '-') . '</td>
+                        </tr>';
+        }
+
+        $totalKeseluruhan = $totalOngkir + $totalPajak;
+
+        $output .= '</tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3">Total</td>
+                    <td id="total-ongkir">Rp. ' . number_format($totalOngkir) . '</td>
+                    <td id="total-pajak">Rp. ' . number_format($totalPajak) . '</td>
+                </tr>
+                <tr>
+                    <td colspan="4">Total Keseluruhan</td>
+                    <td id="total-keseluruan">Rp. ' . number_format($totalKeseluruhan) . '</td>
+                </tr>
+            </tfoot>
+        </table>';
+
+        return $output;
+    }
+
 
     public function exportTagihan(Request $req)
     {

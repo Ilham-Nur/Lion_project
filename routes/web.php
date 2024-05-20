@@ -38,6 +38,7 @@ Route::get('/exportTagihan', [TagihanController::class, 'exportTagihan'])->name(
 Route::get('/tagihan/getlisttagihan', [TagihanController::class, 'getlistTagihan'])->name('getlistTagihan');
 Route::get('/tagihan/hapustagihan', [TagihanController::class, 'hapusTagihan'])->name('hapusTagihan');
 Route::get('/listPelanggan', [UserController::class, 'listPelanggan'])->name('listPelanggan');
+Route::get('/taguhan/preview', [TagihanController::class, 'previewTagihan'])->name('previewTagihan');
 
 //Menu User
 Route::get('/user', [UserController::class, 'index'])->name('menuuser');

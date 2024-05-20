@@ -142,7 +142,7 @@
                     lengthChange: false,
                     "bSort": true,
                     "aaSorting": [],
-                    pageLength: 7,
+                    pageLength: 5,
                     "lengthChange": false,
                     responsive: true,
                     language: { search: "" }
