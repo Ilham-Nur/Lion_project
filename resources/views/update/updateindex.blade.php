@@ -370,22 +370,36 @@
             denyButtonText: `Don't save`
         }).then((result) => {
             if (result.isConfirmed) {
+                // Show loading screen
+                Swal.fire({
+                    title: 'Saving...',
+                    text: 'Please wait while we save your data.',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
                 $.ajax({
                     type: "GET",
                     url: "{{ route('insertDataHarian') }}",
                     data: {dataImport},
                     dataType: "JSON",
                     success: function (RES) {
-                        console.log(RES);
+                        Swal.close(); // Close the loading screen
                         Swal.fire("Saved!", "", "success");
                         getListDataHarian();
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Swal.close(); // Close the loading screen in case of error
+                        Swal.fire("Error!", "There was a problem saving your data.", "error");
                     }
                 });
             } else if (result.isDenied) {
                 Swal.fire("Changes are not saved", "", "info");
             }
         });
-    })
+    });
   </script>
   <script>
     $('#modalImportExcel').on('hidden.bs.modal', function () {
