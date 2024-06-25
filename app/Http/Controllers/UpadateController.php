@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportDataHarian;
 
 class UpadateController extends Controller
 {
@@ -21,8 +23,6 @@ class UpadateController extends Controller
         } else {
             $formattedFilter = date_create_from_format("M Y", $filter)->format("Y-m");
         }
-
-
 
         $q = "SELECT
                     a.id,
@@ -261,6 +261,29 @@ class UpadateController extends Controller
         } catch (\Exception $e) {
             // Jika terjadi kesalahan, kembalikan respons gagal
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    public function exportData(Request $request)
+    {
+        try {
+            $tanggal = $request->input('tanggal');
+
+
+            $date = DateTime::createFromFormat('M Y', $tanggal);
+
+            $formattedDate = $date->format('Y-m');
+
+            return Excel::download(new ExportDataHarian($formattedDate), 'ExportData.xlsx');
+        } catch (\Throwable $th) {
+            return response()->json([
+                'MESSAGETYPE' => 'E',
+                'MESSAGE' => 'Something went wrong',
+                'SERVERMSG' => $th->getMessage(),
+            ], 400)->header(
+                'Accept',
+                'application/json'
+            );
         }
     }
 

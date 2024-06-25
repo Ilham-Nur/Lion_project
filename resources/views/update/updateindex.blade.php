@@ -185,9 +185,14 @@
             Reset
           </button>
         </div>
-        <div class="d-flex gap-3">
+        <div class="d-flex gap-1">
           <button type="button" id="" class="btn btn-primary btnModalImportExcel">Import Data Genesis Lion Parcel</button>
           <button type="button" id="btnTambahDataManual" class="btn btn-primary">Tambah Data Harian</button>
+          <form action="{{ route('exportData') }}" method="POST">
+            @csrf
+            <input type="hidden" id="exportTanggal" name="tanggal">
+            <button type="submit" class="btn btn-primary">Export</button>
+        </form>
         </div>
       </div>
   <div id="containerDataHarian" class="col-sm-12 mt-3">
@@ -289,7 +294,6 @@
 
     let selectedMonth = '';
 
-
     const getListDataHarian = () => {
         const txtSearch = $('#txSearch').val();
 
@@ -323,7 +327,7 @@
 
     $('#txSearch').keyup(function(e) {
         var inputText = $(this).val();
-        if (inputText.length >= 2 || inputText.length == 0) {
+        if (inputText.length >= 1 || inputText.length == 0) {
             getListDataHarian();
         }
     })
@@ -344,6 +348,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const calendarTitle = document.getElementById('calendarTitle');
         calendarTitle.textContent = getCurrentMonth();
+        $("#exportTanggal").val(calendarTitle.textContent);
     });
 
     const monthFilterInput = document.getElementById('monthEvent');
@@ -364,6 +369,8 @@
             calendarTitle.textContent = selectedMonth;
             console.log("ini hasil dari filter bulan", selectedMonth);
             getListDataHarian();
+            $("#exportTanggal").val(selectedMonth);
+
         }
     });
 </script>
