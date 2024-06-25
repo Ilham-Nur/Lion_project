@@ -174,14 +174,22 @@
 
 
   <div class="row mt-3">
-    <div class="d-flex gap-3 justify-content-between">
-      {{-- Search --}}
-      <input id="txSearch" type="text" style="width: 250px; min-width: 250px;"class="form-control rounded-3" placeholder="Search">
-      <div class="d-flex gap-3">
-        <button type="button" id="" class="btn btn-primary btnModalImportExcel">Import Data Genesis Lion Parcel</button>
-        <button type="button" id="btnTambahDataManual" class="btn btn-primary">Tambah Data Harian</button>
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex gap-1">
+          {{-- Search --}}
+          <input id="txSearch" type="text" style="width: 250px; min-width: 250px;" class="form-control rounded-3" placeholder="Search">
+          <button id="monthEvent" class="btn btn-light form-control" style="border: 1px solid #e9ecef;">
+            <span id="calendarTitle" class="fs-4"></span>
+          </button>
+          <button type="button" class="btn btn-outline-secondary" id="btnResetDefault" onclick="window.location.reload()">
+            Reset
+          </button>
+        </div>
+        <div class="d-flex gap-3">
+          <button type="button" id="" class="btn btn-primary btnModalImportExcel">Import Data Genesis Lion Parcel</button>
+          <button type="button" id="btnTambahDataManual" class="btn btn-primary">Tambah Data Harian</button>
+        </div>
       </div>
-  </div>
   <div id="containerDataHarian" class="col-sm-12 mt-3">
     {{-- <table id="tableDataHarian" class="table table-responsive table-hover">
         <thead>
@@ -264,8 +272,8 @@
             </tr>
         </tbody>
     </table> --}}
+    </div>
 </div>
-  </div>
 
 @endsection
 
@@ -273,39 +281,42 @@
 <script>
     let dataImport = [];
 </script>
+<script>
+    const loadSpin = `<div class="d-flex justify-content-center align-items-center mt-5">
+        <div class="spinner-border d-flex justify-content-center align-items-center text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
+    </div> `;
 
-  <script>
-      const loadSpin = `<div class="d-flex justify-content-center align-items-center mt-5">
-                <div class="spinner-border d-flex justify-content-center align-items-center text-primary" role="status"><span class="visually-hidden">Loading...</span></div>
-            </div> `;
 
-    // get list Team
+    let selectedMonth = '';
+
+
     const getListDataHarian = () => {
         const txtSearch = $('#txSearch').val();
 
         $.ajax({
-                url: "{{ route('getlistDataHarian') }}",
-                method: "GET",
-                data: {
-                    txSearch: txtSearch
-                },
-                beforeSend: () => {
-                    $('#containerDataHarian').html(loadSpin)
-                }
-            })
-            .done(res => {
-                $('#containerDataHarian').html(res)
-                $('#tableDataHarian').DataTable({
-                    searching: false,
-                    lengthChange: false,
-                    "bSort": true,
-                    "aaSorting": [],
-                    pageLength: 5,
-                    "lengthChange": false,
-                    responsive: true,
-                    language: { search: "" }
-                });
-            })
+            url: "{{ route('getlistDataHarian') }}",
+            method: "GET",
+            data: {
+                txSearch: txtSearch,
+                filter: selectedMonth
+            },
+            beforeSend: () => {
+                $('#containerDataHarian').html(loadSpin)
+            }
+        })
+        .done(res => {
+            $('#containerDataHarian').html(res)
+            $('#tableDataHarian').DataTable({
+                searching: false,
+                lengthChange: false,
+                "bSort": true,
+                "aaSorting": [],
+                pageLength: 5,
+                "lengthChange": false,
+                responsive: true,
+                language: { search: "" }
+            });
+        })
     }
 
     getListDataHarian();
@@ -313,11 +324,50 @@
     $('#txSearch').keyup(function(e) {
         var inputText = $(this).val();
         if (inputText.length >= 2 || inputText.length == 0) {
-          getListDataHarian();
+            getListDataHarian();
         }
     })
 
-  </script>
+    function getCurrentMonth() {
+        const months = [
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ];
+
+        const currentDate = new Date();
+        const currentMonth = months[currentDate.getMonth()];
+        const currentYear = currentDate.getFullYear();
+
+        return `${currentMonth} ${currentYear}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarTitle = document.getElementById('calendarTitle');
+        calendarTitle.textContent = getCurrentMonth();
+    });
+
+    const monthFilterInput = document.getElementById('monthEvent');
+
+    const flatpickrInstance = flatpickr(monthFilterInput, {
+        plugins: [
+            new monthSelectPlugin({
+                shorthand: true,
+                dateFormat: "M Y",
+                altFormat: "M Y",
+                theme: "light"
+            })
+        ],
+        onChange: function(selectedDates, dateStr, instance) {
+            const selectedDate = selectedDates[0];
+            selectedMonth = instance.formatDate(selectedDate, "M Y");
+            const calendarTitle = document.getElementById('calendarTitle');
+            calendarTitle.textContent = selectedMonth;
+            console.log("ini hasil dari filter bulan", selectedMonth);
+            getListDataHarian();
+        }
+    });
+</script>
+
   <script>
     $(document).on('click', '.btnModalImportExcel', function (e) {
         e.preventDefault();

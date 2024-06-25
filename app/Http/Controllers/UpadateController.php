@@ -15,6 +15,14 @@ class UpadateController extends Controller
     public function getlistDataHarian(Request $request)
     {
         $txSearch = '%' . strtoupper(trim($request->txSearch)) . '%';
+        $filter = $request->filter;
+        if (!$filter) {
+            $formattedFilter = date('Y-m');
+        } else {
+            $formattedFilter = date_create_from_format("M Y", $filter)->format("Y-m");
+        }
+
+
 
         $q = "SELECT
                     a.id,
@@ -30,12 +38,15 @@ class UpadateController extends Controller
                     c.id as id_pembayaran
                 FROM tbl_harian a
                 INNER JOIN tbl_pembayaran c ON c.id = a.pembayaran_id
-                WHERE UPPER(jenis_pembayaran) LIKE UPPER('$txSearch')
-                OR UPPER(no_resi) LIKE UPPER('$txSearch')
-                OR UPPER(a.pelanggan) LIKE UPPER('$txSearch')
-                OR UPPER(c.name) LIKE UPPER('$txSearch')
-                ORDER BY id Desc
-                LIMIT 100
+                WHERE (
+                    UPPER(a.jenis_pembayaran) LIKE UPPER('$txSearch')
+                    OR UPPER(a.no_resi) LIKE UPPER('$txSearch')
+                    OR UPPER(a.pelanggan) LIKE UPPER('$txSearch')
+                    OR UPPER(c.name) LIKE UPPER('$txSearch')
+                )
+                AND a.tanggal BETWEEN '" . $formattedFilter . "-01' AND '" . $formattedFilter . "-31'
+                ORDER BY a.id DESC
+                LIMIT 100;
         ";
 
         $data = DB::select($q);
