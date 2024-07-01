@@ -399,6 +399,7 @@
                     tanggal: row[1],
                     pelanggan: row[5],
                     ongkir: row[41],
+                    status: row[51],
                     pajak: (parseInt(row[44] || 0) + parseInt(row[45] || 0) + parseInt(row[46] || 0))
                 }));
             var outputDiv = document.getElementById('output');

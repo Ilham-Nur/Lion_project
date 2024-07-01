@@ -144,6 +144,11 @@ class UpadateController extends Controller
 
             DB::beginTransaction();
             foreach ($req->dataImport as $r) {
+
+                if ($r['status'] == 'CNX') {
+                    continue;
+                }
+
                 DB::table('tbl_harian')->insert([
                     "tanggal" => new DateTime($r['tanggal']),
                     "jenis_pembayaran" => "Masuk",
