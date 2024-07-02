@@ -132,6 +132,11 @@
             } else if (!password) {
                 showMessage("error", "Masukkan Password");
             }
+             // Periksa koneksi internet sebelum melakukan permintaan AJAX
+            if (!navigator.onLine) {
+                showMessage("error", "Koneksi Internet Error");
+                return;
+            }
 
             if (email && password ) {
                 $.ajax({
@@ -142,13 +147,6 @@
                         "password": password,
                     },
                     success: function (response) {
-                        //   if (response.role_id === 1) {
-                        //       window.location.href = response.redirect_url;
-                        //   } else if (response.role_id === 2) {
-                        //       window.location.href = response.redirect_url;
-                        //   } else {
-                        //     showMessage("error", "User Tidak Memiliki Role");
-                        //   }
                         window.location.href = response.redirect_url;
                       },
                     error: function(xhr, status, error) {
