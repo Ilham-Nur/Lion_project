@@ -50,12 +50,26 @@ class DashboardController extends Controller
                         AND b.id <> 3;
         ";
 
-        $q3 = "SELECT SUM(COALESCE(a.pajak, a.ongkir)) AS total_tagihan
-                FROM tbl_harian a
-                JOIN tbl_pembayaran b ON a.pembayaran_id = b.id
-                WHERE a.tanggal BETWEEN '" . $formattedFilter . "-01' AND '" . $formattedFilter . "-31'
-                AND b.id = 3;
+        // $q3 = "SELECT SUM(COALESCE(a.pajak, a.ongkir)) AS total_tagihan
+        //         FROM tbl_harian a
+        //         JOIN tbl_pembayaran b ON a.pembayaran_id = b.id
+        //         WHERE a.tanggal BETWEEN '" . $formattedFilter . "-01' AND '" . $formattedFilter . "-31'
+        //         AND b.id = 3;
+        // ";
+
+        $q3 = "SELECT
+                    (SUM(a.ongkir) + SUM(a.pajak)) AS total_tagihan
+                FROM
+                    tbl_harian a
+                JOIN
+                    tbl_pembayaran b ON a.pembayaran_id = b.id
+                WHERE
+                    a.tanggal BETWEEN '" . $formattedFilter . "-01' AND '" . $formattedFilter . "-31'
+                AND
+                    b.id = 3;
         ";
+
+
 
         $pengeluaran = DB::select($q2);
         $pemasukan = DB::select($q1);
